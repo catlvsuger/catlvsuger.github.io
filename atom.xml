@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mydiscat.cn/"/>
-  <updated>2018-10-29T16:07:30.903Z</updated>
+  <updated>2018-10-31T10:13:35.774Z</updated>
   <id>https://mydiscat.cn/</id>
   
   <author>
@@ -17,24 +17,46 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>开启 Hexo 博客之旅</title>
+    <link href="https://mydiscat.cn/category/2018/10/31/Open%20the%20Hexo%20blog%20tour.html"/>
+    <id>https://mydiscat.cn/category/2018/10/31/Open the Hexo blog tour.html</id>
+    <published>2018-10-30T16:00:00.000Z</published>
+    <updated>2018-10-31T10:13:35.774Z</updated>
+    
+    <content type="html"><![CDATA[<p class="description"></p><h2 id="Hexo-github-pages-搭建博客-，速度快的飞起，直接按网上的步骤开始"><a href="#Hexo-github-pages-搭建博客-，速度快的飞起，直接按网上的步骤开始" class="headerlink" title="Hexo + github pages 搭建博客 ，速度快的飞起，直接按网上的步骤开始"></a>Hexo + github pages 搭建博客 ，速度快的飞起，直接按网上的步骤开始</h2><p><strong>参考如下，可以直接按第二个去弄，主题是 next</strong></p><blockquote><ul><li>使用 hexo+github pages 搭建博客：<a href="http://laijianfeng.org/2018/05/使用hexo-github-pages搭建博客/" target="_blank" rel="noopener">http://laijianfeng.org/2018/05/使用hexo-github-pages搭建博客/</a></li></ul></blockquote><blockquote><ul><li><strong>打造个性化博客（极致详细）</strong>：<a href="https://reuixiy.github.io/technology/computer/computer-aided-art/2017/06/09/hexo-next-optimization.html" target="_blank" rel="noopener">https://reuixiy.github.io/technology/computer/computer-aided-art/2017/06/09/hexo-next-optimization.html</a></li><li>修改文章内链接样式｜hexo： <a href="https://blog.csdn.net/qw8880000/article/details/80235648" target="_blank" rel="noopener">https://blog.csdn.net/qw8880000/article/details/80235648</a></li><li>hexo 的 next 主题个性化教程：打造炫酷网站：<a href="https://blog.csdn.net/qq_33699981/article/details/72716951?utm_source=blogxgwz1" target="_blank" rel="noopener">https://blog.csdn.net/qq_33699981/article/details/72716951?utm_source=blogxgwz1</a></li><li>在 NexT 中使用 Valine 评论系统：<a href="https://reuixiy.github.io/technology/computer/computer-aided-art/2018/07/15/use-valine-in-theme-next.html" target="_blank" rel="noopener">https://reuixiy.github.io/technology/computer/computer-aided-art/2018/07/15/use-valine-in-theme-next.html</a></li></ul></blockquote><a id="more"></a><p><strong>安装没什么问题，个性化优化过程有点繁琐</strong> </p><h2 id="遇到问题有以下几点："><a href="#遇到问题有以下几点：" class="headerlink" title="遇到问题有以下几点："></a>遇到问题有以下几点：</h2><blockquote><ul><li>图片本地可以，上传到 github 除了主页，其他的跳转后显示有问题，图片路径修改为 github 的存储路径就好了，也可以用七牛云存储图片，但给的测试域名只有一个月有效期，长期的必须要备案的域名才行，后续在处理图片存储</li></ul></blockquote><blockquote><ul><li>页面 CSS 样式调整，比较费时，有前端的朋友找他们比较快速</li><li>用谷歌浏览器调试，内存飞速溢出，网站直接打不开，换火狐就好了（试了下 <strong>reuixiy</strong> 的博客，同样的问题，那就不是我安装的问题，后续有时间再看）</li><li>其他的问题在 reuixiy 的博客里都可以找到答案</li><li>YAMLException: end of the stream or a document separator is expected at line 2 好一番检查才发现第一行 — 变成 – 两个了 <strong>（特别注意符号，英文: 和空格）</strong></li></ul></blockquote><p>[Create：2018年10月31日]</p><hr><p>话不多说，接下来就是开始我的博客之旅~~~ </p><hr>]]></content>
+    
+    <summary type="html">
+    
+      汇集 Hexo 安装优化资源，以及使用中遇到的问题，解决方法，持续更新
+    
+    </summary>
+    
+      <category term="Hexo" scheme="https://mydiscat.cn/categories/Hexo/"/>
+    
+    
+      <category term="Hexo" scheme="https://mydiscat.cn/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
     <title>开篇</title>
     <link href="https://mydiscat.cn/category/2018/10/29/begin.html"/>
     <id>https://mydiscat.cn/category/2018/10/29/begin.html</id>
     <published>2018-10-29T15:41:45.894Z</published>
-    <updated>2018-10-29T16:07:30.903Z</updated>
+    <updated>2018-10-31T09:42:58.104Z</updated>
     
-    <content type="html"><![CDATA[<p>一件事总要去做，最好就是现在，也许有点晚，总算开始了<br>Just do it</p>]]></content>
+    <content type="html"><![CDATA[<hr><p>一件事总要去做，最好就是现在，也许有点晚，总算开始了<br>Just do it</p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;p&gt;一件事总要去做，最好就是现在，也许有点晚，总算开始了&lt;br&gt;Just do it&lt;/p&gt;
-
-      
+      Hexo 博客安装成功
     
     </summary>
     
+      <category term="随笔" scheme="https://mydiscat.cn/categories/%E9%9A%8F%E7%AC%94/"/>
+    
+    
+      <category term="随笔" scheme="https://mydiscat.cn/tags/%E9%9A%8F%E7%AC%94/"/>
     
   </entry>
   

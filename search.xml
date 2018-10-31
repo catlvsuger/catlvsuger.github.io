@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[开启 Hexo 博客之旅]]></title>
+    <url>%2Fcategory%2F2018%2F10%2F31%2FOpen%20the%20Hexo%20blog%20tour.html</url>
+    <content type="text"><![CDATA[Hexo + github pages 搭建博客 ，速度快的飞起，直接按网上的步骤开始参考如下，可以直接按第二个去弄，主题是 next 使用 hexo+github pages 搭建博客：http://laijianfeng.org/2018/05/使用hexo-github-pages搭建博客/ 打造个性化博客（极致详细）：https://reuixiy.github.io/technology/computer/computer-aided-art/2017/06/09/hexo-next-optimization.html 修改文章内链接样式｜hexo： https://blog.csdn.net/qw8880000/article/details/80235648 hexo 的 next 主题个性化教程：打造炫酷网站：https://blog.csdn.net/qq_33699981/article/details/72716951?utm_source=blogxgwz1 在 NexT 中使用 Valine 评论系统：https://reuixiy.github.io/technology/computer/computer-aided-art/2018/07/15/use-valine-in-theme-next.html 安装没什么问题，个性化优化过程有点繁琐 遇到问题有以下几点： 图片本地可以，上传到 github 除了主页，其他的跳转后显示有问题，图片路径修改为 github 的存储路径就好了，也可以用七牛云存储图片，但给的测试域名只有一个月有效期，长期的必须要备案的域名才行，后续在处理图片存储 页面 CSS 样式调整，比较费时，有前端的朋友找他们比较快速 用谷歌浏览器调试，内存飞速溢出，网站直接打不开，换火狐就好了（试了下 reuixiy 的博客，同样的问题，那就不是我安装的问题，后续有时间再看） 其他的问题在 reuixiy 的博客里都可以找到答案 YAMLException: end of the stream or a document separator is expected at line 2 好一番检查才发现第一行 — 变成 – 两个了 （特别注意符号，英文: 和空格） [Create：2018年10月31日] 话不多说，接下来就是开始我的博客之旅~~~]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[开篇]]></title>
     <url>%2Fcategory%2F2018%2F10%2F29%2Fbegin.html</url>
     <content type="text"><![CDATA[一件事总要去做，最好就是现在，也许有点晚，总算开始了Just do it]]></content>
+      <categories>
+        <category>随笔</category>
+      </categories>
+      <tags>
+        <tag>随笔</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[Hello World]]></title>
