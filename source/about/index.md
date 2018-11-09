@@ -1,0 +1,39 @@
+---
+title: ABOUT
+date: 2018-10-30 18:26:03
+permalink: about
+categories: about
+tags: [about]
+description:  热爱Java ，喜欢骑行的 Boy，骑过海南，川藏线，青藏线，丝路，内蒙，翻过秦岭，三峡，环过太湖，没走过新藏线，滇藏线，独库，也没环过台，更没环中国......未来可期，没有女朋友的话
+image:
+---
+<p class="description"></p>
+>一直苦恼记性不好，经常忘记网站账号密码，有些博客慢慢就不知道怎么进去，写东西东一鳞西一爪，写过就忘，想再找就很费劲，浪费很多时间，总想好好规整规整，刚好用 Hexo 建这个博客，按照 这个 [打造个性超赞博客](https://reuixiy.github.io/technology/computer/computer-aided-art/2017/06/09/hexo-next-optimization.html) 一步一步来建博客 so easy，目录分类标签清晰而强大，折腾了几天基本好了，后续就是 文章模板（MarkEditor） 、自动部署 、备份迁移、文件存储，最重要的是技术学习了
+
+<div class="note default"><p> 如果人生是一场游戏，那我的愿望就是多刷点图，到处走走</p></div>
+<div class="note primary"><p> 爱生活， 爱骑行 ， 音乐， 电视剧，游戏  好奇</p></div>
+<div class="note success"><p>近几年想去的地方    有： 梅里，新藏线，独库公路，喀纳斯，川西，东北，台湾，东南亚</p></div>
+<div class="note info"><p>提升：   养成好的作息，学习 Java 技术并精通一些，算法，提高沟通， 学好英语， 学习摄影， 维护好博客， 创业 </p></div>
+<div class="note warning"><p>不虚度每个周末</p></div>
+<div class="note danger"><p>缺点：自制力差， 记性差， 思考反应慢，视野不够开阔，语言能力差</p></div>
+
+
+{% tabs 选项卡, 2 %}
+<!-- tab  世界-->
+接受变化，坚持原则，和而不同，尊重他人
+我们在社会上扮演什么角色就要做好份内事，尽责
+一直向前看，不去后悔
+<!-- endtab -->
+<!-- tab  人生-->
+努力积极的过活，大事固执，小事随意
+正视生活的难题和挫折，不逃避，不怕犯错
+没有什么年龄必须做什么，不能做什么
+生死由命，向死而生
+<!-- endtab -->
+<!-- tab  价值-->
+物少而精，人贵真诚
+该花就花，经历比金钱重要
+人最重要，其次事，再次物
+<!-- endtab -->
+{% endtabs %}
+- - - 
