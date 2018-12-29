@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mydiscat.cn/"/>
-  <updated>2018-12-21T16:13:51.773Z</updated>
+  <updated>2018-12-29T13:52:58.230Z</updated>
   <id>https://mydiscat.cn/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>音乐</title>
+    <link href="https://mydiscat.cn/category/2018/12/21/music.html"/>
+    <id>https://mydiscat.cn/category/2018/12/21/music.html</id>
+    <published>2018-12-20T16:00:00.000Z</published>
+    <updated>2018-12-29T13:52:58.230Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p class="description"></p><ol><li><a href="https://kg2.qq.com/node/play?s=3DC8kD3TFV5a033I&amp;shareuid=6a9d9f862125368f37&amp;topsource=a0_pn201001006_z11_u802348143_l0_t1545919590__" target="_blank" rel="noopener">&#x8BB2;&#x771F;&#x7684;</a><a id="more"></a></li><li><a href="https://kg2.qq.com/node/play?s=4QouZQ4cpWXyL4bf&amp;shareuid=6a9d9f862125368f37&amp;topsource=a0_pn201001006_z11_u802348143_l0_t1546091445__" target="_blank" rel="noopener">&#x96EA;&#x843D;&#x4E0B;&#x7684;&#x58F0;&#x97F3;</a></li></ol><hr><ul><li>&#x6BCF;&#x5468;&#x5B66;&#x4F1A;&#x4E00;&#x9996;&#x6B4C;</li></ul><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+    
+    <summary type="html">
+    
+      学习唱歌
+    
+    </summary>
+    
+      <category term="人生" scheme="https://mydiscat.cn/categories/%E4%BA%BA%E7%94%9F/"/>
+    
+    
+      <category term="人生" scheme="https://mydiscat.cn/tags/%E4%BA%BA%E7%94%9F/"/>
+    
+      <category term="唱歌" scheme="https://mydiscat.cn/tags/%E5%94%B1%E6%AD%8C/"/>
+    
+  </entry>
   
   <entry>
     <title>记录</title>
@@ -143,28 +167,6 @@
   </entry>
   
   <entry>
-    <title>2018总结</title>
-    <link href="https://mydiscat.cn/category/2018/12/15/year-end%20summary.html"/>
-    <id>https://mydiscat.cn/category/2018/12/15/year-end summary.html</id>
-    <published>2018-12-14T16:00:00.000Z</published>
-    <updated>2018-12-15T10:24:49.431Z</updated>
-    
-    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p></p><p class="description"></p><br><strong>&#x65F6;&#x95F4;&#x6700;&#x73CD;&#x8D35;&#xFF0C;&#x4E5F;&#x662F;&#x6700;&#x88AB;&#x6D6A;&#x8D39;&#x7684;&#x8D22;&#x5BCC;</strong><p></p><p>&#x4ECA;&#x5E74;&#x8FC7;&#x5F97;&#x597D;&#x50CF;&#x5F88;&#x7CDF;&#xFF0C;&#x4E0D;&#x77E5;&#x9053;&#x603B;&#x7ED3;&#x4EC0;&#x4E48;&#xFF0C;&#x4E0D;&#x8FC7;&#x6709;&#x4E86;&#x8FD9;&#x4E2A; blog&#xFF0C;&#x8FD9;&#x662F;&#x5C5E;&#x4E8E;&#x6211;&#x7684;&#x4E00;&#x7247;&#x5C0F;&#x5929;&#x5730;&#xFF0C;&#x6211;&#x4F1A;&#x597D;&#x597D;&#x7EF4;&#x62A4;&#x5B83;&#xFF0C;&#x4ECA;&#x5E74;&#x7684;&#x603B;&#x7ED3;&#xFF0C;&#x6765;&#x5E74;&#x7684;&#x8BA1;&#x5212;&#x90FD;&#x8981;&#x597D;&#x597D;&#x5199;<br><a id="more"></a></p><ul><li>&#x5DE5;&#x4F5C;: &#x9A6C;&#x9A6C;&#x864E;&#x864E;&#xFF0C;&#x5B8C;&#x6210;&#x672C;&#x804C;&#xFF0C;&#x5DE5;&#x4F5C;&#x6001;&#x5EA6;&#x7565;&#x6563;&#x6F2B;&#xFF0C;&#x4E5F;&#x8BB8;&#x662F;&#x5BF9;&#x4E8E;&#x719F;&#x6089;&#x7684;&#x4E8B;&#xFF0C;&#x5C11;&#x4E86;&#x5B66;&#x4E60;</li><li>&#x5B66;&#x4E60;: &#x4E09;&#x5929;&#x6253;&#x9C7C;&#x4E24;&#x5929;&#x6652;&#x7F51;&#xFF0C;&#x4E00;&#x4E8B;&#x65E0;&#x6210;&#xFF0C;&#x7C97;&#x800C;&#x4E0D;&#x6DF1;&#x5165;&#xFF0C;&#x5B66;&#x800C;&#x4E0D;&#x7EC3;</li><li>&#x751F;&#x6D3B;: &#x7F3A;&#x5C11;&#x8FD0;&#x52A8;&#xFF0C;&#x4F5C;&#x606F;&#x4E5F;&#x4E0D;&#x597D;,&#x5403;&#x996D;&#x4E0D;&#x89C4;&#x5F8B;&#xFF0C;&#x8EAB;&#x4F53;&#x5E94;&#x8BE5;&#x4E5F;&#x53D8;&#x5DEE;&#x4E86;&#x597D;&#x591A;</li><li>&#x7231;&#x597D;: &#x9A91;&#x8F66;&#x8D8A;&#x53D1;&#x5C11;&#x4E86;&#xFF0C;&#x4E5F;&#x8D8A;&#x53D1;&#x6162;&#xFF0C;&#x6709;&#x4E00;&#x4EF6;&#x5F00;&#x5FC3;&#x7684;&#x4E8B;&#xFF0C;&#x7EC8;&#x4E8E;&#x73AF;&#x4E86;&#x4E00;&#x6B21;&#x592A;&#x6E56;&#xFF0C;&#x867D;&#x7136;&#x6CA1;&#x6709;&#x8FBE;&#x6210;300km &#x7684;&#x76EE;&#x6807;&#xFF0C;&#x73AF;&#x592A;&#x6E56;&#x5DF2;&#x7ECF;&#x77E5;&#x8DB3;&#x3002; &#x4ECA;&#x5E74;&#x56E0;&#x4E3A;&#x5DE5;&#x4F5C;&#x539F;&#x56E0;&#xFF0C;&#x53BB;&#x4E86;&#x6D4E;&#x6E90;&#xFF0C;&#x65E0;&#x9521;&#xFF0C;&#x987A;&#x8DEF;&#x53BB;&#x4E86;&#x53A6;&#x95E8;&#xFF0C;&#x5E74;&#x521D;&#x548C;&#x59D0;&#x53BB;&#x4E86;&#x6842;&#x6797;&#xFF0C;&#x5E74;&#x672B;&#x548C;&#x670B;&#x53CB;&#x53BB;&#x4E86;&#x5357;&#x5B81;&#xFF0C;&#x9632;&#x57CE;&#x6E2F;&#xFF0C;&#x660E;&#x5929;&#x53BB;&#x5170;&#x5361;&#x3002;&#x7A81;&#x7136;&#x89C9;&#x5F97;&#x73A9;&#x8FD9;&#x65B9;&#x9762;&#x4ECA;&#x5E74;&#x5DF2;&#x7ECF;&#x975E;&#x5E38;&#x4E0D;&#x9519;&#x4E86;</li><li>&#x5BB6;&#x5EAD;: &#x5BB6;&#x4EBA;&#x90FD;&#x8FD8;&#x597D;&#xFF0C;&#x56FD;&#x5E86;&#x5927;&#x4F2F;&#x59D1;&#x59D1;&#x56DE;&#x4E1C;&#x839E;&#x65F6;&#x51FA;&#x8F66;&#x7978;&#xFF0C;&#x76EE;&#x524D;&#x90FD;&#x5B89;&#x597D;&#xFF0C;&#x5C5E;&#x6211;&#x6700;&#x5E78;&#x8FD0;&#xFF0C;&#x51E0;&#x4E4E;&#x65E0;&#x4F24;&#x3002; &#x5927;&#x59D0;&#x592B;&#x8BF4;&#xFF0C;&#x6211;&#x627E;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x4ED6;&#x6709;&#x7406;&#x7531;&#x6362;&#x65B0;&#x8F66;&#xFF0C;&#x6211;&#x4EEC;&#x5408;&#x4F5C;&#x4E92;&#x5229;&#xFF0C;&#x76EE;&#x524D;&#x770B;&#x6765;&#xFF0C;&#x5408;&#x4F5C;&#x5931;&#x8D25;&#x4E86;&#xFF0C;&#x4E60;&#x60EF;&#x4E86;&#x4E00;&#x4E2A;&#x4EBA;&#xFF0C;&#x5F88;&#x96BE;&#x518D;&#x559C;&#x6B22;&#x4E0A;&#x4E00;&#x4E2A;&#x4EBA;&#xFF0C;&#x51E1;&#x4E8B;&#x4E5F;&#x96BE;&#x5F3A;&#x6C42;</li><li>&#x670B;&#x53CB;&#xFF0C;&#x670B;&#x53CB;&#x6765;&#x6765;&#x53BB;&#x53BB;&#xFF0C;&#x90FD;&#x5C5E;&#x5E73;&#x5E38;&#xFF0C;&#x4ECA;&#x5E74;&#x89C1;&#x4E86;&#x5F88;&#x591A;&#x8BB8;&#x4E45;&#x4E0D;&#x89C1;&#x7684;&#x540C;&#x5B66;&#xFF0C;&#x670B;&#x53CB;&#xFF0C;&#x5F88;&#x77E5;&#x8DB3;&#x3002;&#x552F;&#x6709;&#x8FD9;&#x4E2A;&#x6708;&#xFF0C;&#x6709;&#x70B9;&#x4F24;&#x611F;&#xFF0C;&#x53EA;&#x662F;&#x60F3;&#x5148;&#x79BB;&#x5F00;&#x51B7;&#x9759;&#x4E0B;&#xFF0C;&#x7ED3;&#x5C40;&#x5374;&#x4E00;&#x53D1;&#x4E0D;&#x53EF;&#x6536;&#x62FE;&#xFF0C;&#x4E5F;&#x8BB8;&#x6211;&#x8BF4;&#x7684;&#x8BDD;&#x592A;&#x4F24;&#x4EBA;&#x300E;&#x5927;&#x6982;&#x5C5E;&#x4E8E;&#x60B2;&#x89C2;&#x4E3B;&#x4E49;&#xFF0C;&#x51E1;&#x4E8B;&#x90FD;&#x5148;&#x5F80;&#x6700;&#x574F;&#x6253;&#x7B97;&#xFF0C;&#x8BF4;&#x51FA;&#x7684;&#x8BDD;&#x4E5F;&#x5C31;&#x4F24;&#x4EBA;&#x5427;&#x300F;&#x7EC8;&#x56DE;&#x4E0D;&#x5230;&#x8FC7;&#x53BB;<br>&#x660E;&#x5929;&#x5C31;&#x53BB;&#x5170;&#x5361;&#x4E86;&#xFF0C;&#x82F1;&#x8BED;&#x4E00;&#x70B9;&#x5B66;&#x7684;&#x5FC3;&#x60C5;&#x4E5F;&#x6CA1;&#x6709;, &#x5C31;&#x8BA9;&#x5F80;&#x4E8B;&#x968F;&#x98CE;&#x800C;&#x53BB;</li></ul><hr><p>&#x7ED3;&#x8BED;: &#x65E0;&#x8BBA;&#x600E;&#x6837;&#xFF0C;&#x6211;&#x59CB;&#x7EC8;&#x76F8;&#x4FE1;&#x751F;&#x6D3B;&#x5145;&#x6EE1;&#x9633;&#x5149;</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
-    
-    <summary type="html">
-    
-      回顾过去，让自己每天进步一点点
-    
-    </summary>
-    
-      <category term="人生" scheme="https://mydiscat.cn/categories/%E4%BA%BA%E7%94%9F/"/>
-    
-    
-      <category term="人生" scheme="https://mydiscat.cn/tags/%E4%BA%BA%E7%94%9F/"/>
-    
-  </entry>
-  
-  <entry>
     <title>2019规划</title>
     <link href="https://mydiscat.cn/category/2018/12/15/planning.html"/>
     <id>https://mydiscat.cn/category/2018/12/15/planning.html</id>
@@ -176,6 +178,28 @@
     <summary type="html">
     
       新的一年，新的开始
+    
+    </summary>
+    
+      <category term="人生" scheme="https://mydiscat.cn/categories/%E4%BA%BA%E7%94%9F/"/>
+    
+    
+      <category term="人生" scheme="https://mydiscat.cn/tags/%E4%BA%BA%E7%94%9F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2018总结</title>
+    <link href="https://mydiscat.cn/category/2018/12/15/year-end%20summary.html"/>
+    <id>https://mydiscat.cn/category/2018/12/15/year-end summary.html</id>
+    <published>2018-12-14T16:00:00.000Z</published>
+    <updated>2018-12-15T10:24:49.431Z</updated>
+    
+    <content type="html"><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="/assets/css/APlayer.min.css"><script src="/assets/js/APlayer.min.js" class="aplayer-secondary-script-marker"></script><p></p><p class="description"></p><br><strong>&#x65F6;&#x95F4;&#x6700;&#x73CD;&#x8D35;&#xFF0C;&#x4E5F;&#x662F;&#x6700;&#x88AB;&#x6D6A;&#x8D39;&#x7684;&#x8D22;&#x5BCC;</strong><p></p><p>&#x4ECA;&#x5E74;&#x8FC7;&#x5F97;&#x597D;&#x50CF;&#x5F88;&#x7CDF;&#xFF0C;&#x4E0D;&#x77E5;&#x9053;&#x603B;&#x7ED3;&#x4EC0;&#x4E48;&#xFF0C;&#x4E0D;&#x8FC7;&#x6709;&#x4E86;&#x8FD9;&#x4E2A; blog&#xFF0C;&#x8FD9;&#x662F;&#x5C5E;&#x4E8E;&#x6211;&#x7684;&#x4E00;&#x7247;&#x5C0F;&#x5929;&#x5730;&#xFF0C;&#x6211;&#x4F1A;&#x597D;&#x597D;&#x7EF4;&#x62A4;&#x5B83;&#xFF0C;&#x4ECA;&#x5E74;&#x7684;&#x603B;&#x7ED3;&#xFF0C;&#x6765;&#x5E74;&#x7684;&#x8BA1;&#x5212;&#x90FD;&#x8981;&#x597D;&#x597D;&#x5199;<br><a id="more"></a></p><ul><li>&#x5DE5;&#x4F5C;: &#x9A6C;&#x9A6C;&#x864E;&#x864E;&#xFF0C;&#x5B8C;&#x6210;&#x672C;&#x804C;&#xFF0C;&#x5DE5;&#x4F5C;&#x6001;&#x5EA6;&#x7565;&#x6563;&#x6F2B;&#xFF0C;&#x4E5F;&#x8BB8;&#x662F;&#x5BF9;&#x4E8E;&#x719F;&#x6089;&#x7684;&#x4E8B;&#xFF0C;&#x5C11;&#x4E86;&#x5B66;&#x4E60;</li><li>&#x5B66;&#x4E60;: &#x4E09;&#x5929;&#x6253;&#x9C7C;&#x4E24;&#x5929;&#x6652;&#x7F51;&#xFF0C;&#x4E00;&#x4E8B;&#x65E0;&#x6210;&#xFF0C;&#x7C97;&#x800C;&#x4E0D;&#x6DF1;&#x5165;&#xFF0C;&#x5B66;&#x800C;&#x4E0D;&#x7EC3;</li><li>&#x751F;&#x6D3B;: &#x7F3A;&#x5C11;&#x8FD0;&#x52A8;&#xFF0C;&#x4F5C;&#x606F;&#x4E5F;&#x4E0D;&#x597D;,&#x5403;&#x996D;&#x4E0D;&#x89C4;&#x5F8B;&#xFF0C;&#x8EAB;&#x4F53;&#x5E94;&#x8BE5;&#x4E5F;&#x53D8;&#x5DEE;&#x4E86;&#x597D;&#x591A;</li><li>&#x7231;&#x597D;: &#x9A91;&#x8F66;&#x8D8A;&#x53D1;&#x5C11;&#x4E86;&#xFF0C;&#x4E5F;&#x8D8A;&#x53D1;&#x6162;&#xFF0C;&#x6709;&#x4E00;&#x4EF6;&#x5F00;&#x5FC3;&#x7684;&#x4E8B;&#xFF0C;&#x7EC8;&#x4E8E;&#x73AF;&#x4E86;&#x4E00;&#x6B21;&#x592A;&#x6E56;&#xFF0C;&#x867D;&#x7136;&#x6CA1;&#x6709;&#x8FBE;&#x6210;300km &#x7684;&#x76EE;&#x6807;&#xFF0C;&#x73AF;&#x592A;&#x6E56;&#x5DF2;&#x7ECF;&#x77E5;&#x8DB3;&#x3002; &#x4ECA;&#x5E74;&#x56E0;&#x4E3A;&#x5DE5;&#x4F5C;&#x539F;&#x56E0;&#xFF0C;&#x53BB;&#x4E86;&#x6D4E;&#x6E90;&#xFF0C;&#x65E0;&#x9521;&#xFF0C;&#x987A;&#x8DEF;&#x53BB;&#x4E86;&#x53A6;&#x95E8;&#xFF0C;&#x5E74;&#x521D;&#x548C;&#x59D0;&#x53BB;&#x4E86;&#x6842;&#x6797;&#xFF0C;&#x5E74;&#x672B;&#x548C;&#x670B;&#x53CB;&#x53BB;&#x4E86;&#x5357;&#x5B81;&#xFF0C;&#x9632;&#x57CE;&#x6E2F;&#xFF0C;&#x660E;&#x5929;&#x53BB;&#x5170;&#x5361;&#x3002;&#x7A81;&#x7136;&#x89C9;&#x5F97;&#x73A9;&#x8FD9;&#x65B9;&#x9762;&#x4ECA;&#x5E74;&#x5DF2;&#x7ECF;&#x975E;&#x5E38;&#x4E0D;&#x9519;&#x4E86;</li><li>&#x5BB6;&#x5EAD;: &#x5BB6;&#x4EBA;&#x90FD;&#x8FD8;&#x597D;&#xFF0C;&#x56FD;&#x5E86;&#x5927;&#x4F2F;&#x59D1;&#x59D1;&#x56DE;&#x4E1C;&#x839E;&#x65F6;&#x51FA;&#x8F66;&#x7978;&#xFF0C;&#x76EE;&#x524D;&#x90FD;&#x5B89;&#x597D;&#xFF0C;&#x5C5E;&#x6211;&#x6700;&#x5E78;&#x8FD0;&#xFF0C;&#x51E0;&#x4E4E;&#x65E0;&#x4F24;&#x3002; &#x5927;&#x59D0;&#x592B;&#x8BF4;&#xFF0C;&#x6211;&#x627E;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x4ED6;&#x6709;&#x7406;&#x7531;&#x6362;&#x65B0;&#x8F66;&#xFF0C;&#x6211;&#x4EEC;&#x5408;&#x4F5C;&#x4E92;&#x5229;&#xFF0C;&#x76EE;&#x524D;&#x770B;&#x6765;&#xFF0C;&#x5408;&#x4F5C;&#x5931;&#x8D25;&#x4E86;&#xFF0C;&#x4E60;&#x60EF;&#x4E86;&#x4E00;&#x4E2A;&#x4EBA;&#xFF0C;&#x5F88;&#x96BE;&#x518D;&#x559C;&#x6B22;&#x4E0A;&#x4E00;&#x4E2A;&#x4EBA;&#xFF0C;&#x51E1;&#x4E8B;&#x4E5F;&#x96BE;&#x5F3A;&#x6C42;</li><li>&#x670B;&#x53CB;&#xFF0C;&#x670B;&#x53CB;&#x6765;&#x6765;&#x53BB;&#x53BB;&#xFF0C;&#x90FD;&#x5C5E;&#x5E73;&#x5E38;&#xFF0C;&#x4ECA;&#x5E74;&#x89C1;&#x4E86;&#x5F88;&#x591A;&#x8BB8;&#x4E45;&#x4E0D;&#x89C1;&#x7684;&#x540C;&#x5B66;&#xFF0C;&#x670B;&#x53CB;&#xFF0C;&#x5F88;&#x77E5;&#x8DB3;&#x3002;&#x552F;&#x6709;&#x8FD9;&#x4E2A;&#x6708;&#xFF0C;&#x6709;&#x70B9;&#x4F24;&#x611F;&#xFF0C;&#x53EA;&#x662F;&#x60F3;&#x5148;&#x79BB;&#x5F00;&#x51B7;&#x9759;&#x4E0B;&#xFF0C;&#x7ED3;&#x5C40;&#x5374;&#x4E00;&#x53D1;&#x4E0D;&#x53EF;&#x6536;&#x62FE;&#xFF0C;&#x4E5F;&#x8BB8;&#x6211;&#x8BF4;&#x7684;&#x8BDD;&#x592A;&#x4F24;&#x4EBA;&#x300E;&#x5927;&#x6982;&#x5C5E;&#x4E8E;&#x60B2;&#x89C2;&#x4E3B;&#x4E49;&#xFF0C;&#x51E1;&#x4E8B;&#x90FD;&#x5148;&#x5F80;&#x6700;&#x574F;&#x6253;&#x7B97;&#xFF0C;&#x8BF4;&#x51FA;&#x7684;&#x8BDD;&#x4E5F;&#x5C31;&#x4F24;&#x4EBA;&#x5427;&#x300F;&#x7EC8;&#x56DE;&#x4E0D;&#x5230;&#x8FC7;&#x53BB;<br>&#x660E;&#x5929;&#x5C31;&#x53BB;&#x5170;&#x5361;&#x4E86;&#xFF0C;&#x82F1;&#x8BED;&#x4E00;&#x70B9;&#x5B66;&#x7684;&#x5FC3;&#x60C5;&#x4E5F;&#x6CA1;&#x6709;, &#x5C31;&#x8BA9;&#x5F80;&#x4E8B;&#x968F;&#x98CE;&#x800C;&#x53BB;</li></ul><hr><p>&#x7ED3;&#x8BED;: &#x65E0;&#x8BBA;&#x600E;&#x6837;&#xFF0C;&#x6211;&#x59CB;&#x7EC8;&#x76F8;&#x4FE1;&#x751F;&#x6D3B;&#x5145;&#x6EE1;&#x9633;&#x5149;</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+    
+    <summary type="html">
+    
+      回顾过去，让自己每天进步一点点
     
     </summary>
     
