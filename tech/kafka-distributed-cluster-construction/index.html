@@ -1,0 +1,166 @@
+<!doctype html><html lang=zh-cn><head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#"><meta charset=utf-8><meta name=generator content="Hugo 0.78.2"><meta name=theme-color content="#fff"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no, date=no, address=no, email=no"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><title>Kafka 集群搭建 | 慢慢悠</title><link rel=stylesheet href=/css/meme.min.css><script src=/js/meme.min.js></script><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel+Decorative:wght@700&display=swap" media=print onload="this.media='all'"><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel+Decorative:wght@700&display=swap"></noscript><meta name=author content="eden"><meta name=description content="基础环境 jdk 1.8 zookeeper-3.4.13 kafka_2.11-0.11.0.0 1、设置 host、安装 jdk 和免密登录 参照：hadoop 集群搭建 2、安装……"><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=mask-icon href=/icons/safari-pinned-tab.svg color=#2a6df4><link rel=apple-touch-icon sizes=180x180 href=/icons/apple-touch-icon.png><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="慢慢悠"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=mobile-web-app-capable content="yes"><meta name=application-name content="慢慢悠"><meta name=msapplication-starturl content="../../"><meta name=msapplication-TileColor content="#fff"><meta name=msapplication-TileImage content="../../icons/mstile-150x150.png"><link rel=manifest href=/manifest.json><link rel=canonical href=https://example.com/tech/kafka-distributed-cluster-construction/><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","datePublished":"2018-11-01T08:00:00+08:00","dateModified":"2020-11-27T17:21:09+08:00","url":"https://example.com/tech/kafka-distributed-cluster-construction/","headline":"Kafka 集群搭建","description":"基础环境 jdk 1.8 zookeeper-3.4.13 kafka_2.11-0.11.0.0 1、设置 host、安装 jdk 和免密登录 参照：hadoop 集群搭建 2、安装……","inLanguage":"zh-CN","articleSection":"tech","wordCount":2318,"image":"https://example.com/icons/apple-touch-icon.png","author":{"@type":"Person","description":"因无所住，而生其心","email":"distant_cat@126.com","image":"https://example.com/icons/apple-touch-icon.png","url":"https://io-oi.me/","name":"eden"},"license":"在保留本文作者及本文链接的前提下，非商业用途随意转载分享。","publisher":{"@type":"Organization","name":"慢慢悠","logo":{"@type":"ImageObject","url":"https://example.com/icons/apple-touch-icon.png"},"url":"https://example.com/"},"mainEntityOfPage":{"@type":"WebSite","@id":"https://example.com/"}}</script><meta name=twitter:card content="summary"><meta name=twitter:creator content="@reuixiy"><meta property="og:title" content="Kafka 集群搭建"><meta property="og:description" content="基础环境 jdk 1.8 zookeeper-3.4.13 kafka_2.11-0.11.0.0 1、设置 host、安装 jdk 和免密登录 参照：hadoop 集群搭建 2、安装……"><meta property="og:url" content="https://example.com/tech/kafka-distributed-cluster-construction/"><meta property="og:site_name" content="慢慢悠"><meta property="og:locale" content="zh"><meta property="og:image" content="https://example.com/icons/apple-touch-icon.png"><meta property="og:type" content="article"><meta property="article:published_time" content="2018-11-01T08:00:00+08:00"><meta property="article:modified_time" content="2020-11-27T17:21:09+08:00"><meta property="article:section" content="tech"><link rel=preconnect href=https://www.google-analytics.com crossorigin><script async src="https://www.googletagmanager.com/gtag/js?id="></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','');</script><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lato:wght@700&text=reuixiy&display=swap" media=print onload="this.media='all'"><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lato:wght@700&text=reuixiy&display=swap"></noscript></head><body><div class=container><header class=header><div class=header-wrapper><div class="header-inner single"><div class=site-brand><a href=/ class=brand>慢慢悠</a></div><nav class=nav><ul class=menu id=menu><li class=menu-item><a href=/life/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon life"><path d="M301.1 212c4.4 4.4 4.4 11.9.0 16.3l-9.7 9.7c-4.4 4.7-11.9 4.7-16.6.0l-10.5-10.5c-4.4-4.7-4.4-11.9.0-16.6l9.7-9.7c4.4-4.4 11.9-4.4 16.6.0l10.5 10.8zm-30.2-19.7c3-3 3-7.8.0-10.5-2.8-3-7.5-3-10.5.0-2.8 2.8-2.8 7.5.0 10.5 3.1 2.8 7.8 2.8 10.5.0zm-26 5.3c-3 2.8-3 7.5.0 10.2 2.8 3 7.5 3 10.5.0 2.8-2.8 2.8-7.5.0-10.2-3-3-7.7-3-10.5.0zm72.5-13.3c-19.9-14.4-33.8-43.2-11.9-68.1 21.6-24.9 40.7-17.2 59.8.8 11.9 11.3 29.3 24.9 17.2 48.2-12.5 23.5-45.1 33.2-65.1 19.1zm47.7-44.5c-8.9-10-23.3 6.9-15.5 16.1 7.4 9 32.1 2.4 15.5-16.1zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-66.2 42.6c2.5-16.1-20.2-16.6-25.2-25.7-13.6-24.1-27.7-36.8-54.5-30.4 11.6-8 23.5-6.1 23.5-6.1.3-6.4.0-13-9.4-24.9 3.9-12.5.3-22.4.3-22.4 15.5-8.6 26.8-24.4 29.1-43.2 3.6-31-18.8-59.2-49.8-62.8-22.1-2.5-43.7 7.7-54.3 25.7-23.2 40.1 1.4 70.9 22.4 81.4-14.4-1.4-34.3-11.9-40.1-34.3-6.6-25.7 2.8-49.8 8.9-61.4.0.0-4.4-5.8-8-8.9.0.0-13.8.0-24.6 5.3 11.9-15.2 25.2-14.4 25.2-14.4.0-6.4-.6-14.9-3.6-21.6-5.4-11-23.8-12.9-31.7 2.8.1-.2.3-.4.4-.5-5 11.9-1.1 55.9 16.9 87.2-2.5 1.4-9.1 6.1-13 10-21.6 9.7-56.2 60.3-56.2 60.3-28.2 10.8-77.2 50.9-70.6 79.7.3 3 1.4 5.5 3 7.5-2.8 2.2-5.5 5-8.3 8.3-11.9 13.8-5.3 35.2 17.7 24.4 15.8-7.2 29.6-20.2 36.3-30.4.0.0-5.5-5-16.3-4.4 27.7-6.6 34.3-9.4 46.2-9.1 8 3.9 8-34.3 8-34.3.0-14.7-2.2-31-11.1-41.5 12.5 12.2 29.1 32.7 28 60.6-.8 18.3-15.2 23-15.2 23-9.1 16.6-43.2 65.9-30.4 106 0 0-9.7-14.9-10.2-22.1-17.4 19.4-46.5 52.3-24.6 64.5 26.6 14.7 108.8-88.6 126.2-142.3 34.6-20.8 55.4-47.3 63.9-65 22 43.5 95.3 94.5 101.1 59z"/></svg><span class=menu-item-name>生活</span></a></li><li class=menu-item><a href=/tech/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon tech"><path d="M512 256c0 141.2-114.7 256-256 256C114.8 512 0 397.3.0 256S114.7.0 256 0s256 114.7 256 256zm-32 0c0-123.2-100.3-224-224-224C132.5 32 32 132.5 32 256s100.5 224 224 224 224-100.5 224-224zM160.9 124.6l86.9 37.1-37.1 86.9-86.9-37.1 37.1-86.9zm110 169.1 46.6 94h-14.6l-50-1e2-48.9 1e2h-14l51.1-106.9-22.3-9.4 6-14 68.6 29.1-6 14.3-16.5-7.1zm-11.8-116.3 68.6 29.4-29.4 68.3L230 246l29.1-68.6zm80.3 42.9 54.6 23.1-23.4 54.3-54.3-23.1 23.1-54.3z"/></svg><span class=menu-item-name>技术</span></a></li><li class=menu-item><a href=/about/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="icon about"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6.0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7.0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4.0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9s28-2.7 40.9-6.9c2.3-.7 4.7-1.1 7.1-1.1 42.9.0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg><span class=menu-item-name>关于</span></a></li><li class=menu-item><a id=theme-switcher href=#><span class="icon theme-icon-light">🌞</span><span class="icon theme-icon-dark">🌙</span></a></li></ul></nav></div></div><input type=checkbox id=nav-toggle aria-hidden=true>
+<label for=nav-toggle class=nav-toggle></label><label for=nav-toggle class=nav-curtain></label></header><main class="main single" id=main><div class=main-inner><article class="content post h-entry" data-align=justify data-type=tech data-toc-num=true><h1 class="post-title p-name">Kafka 集群搭建</h1><div class="post-body e-content"><p class=description></p><p><strong>基础环境</strong></p><blockquote><p style=text-indent:0><span class=drop-cap>j</span>dk 1.8
+zookeeper-3.4.13
+kafka_2.11-0.11.0.0</p></blockquote><p>1、设置 host、安装 jdk 和免密登录</p><blockquote><p>参照：<a href=https://www.jianshu.com/p/23040dc93905 target=_blank rel=noopener>hadoop 集群搭建</a></p></blockquote><p>2、安装 zookeeper 集群</p><blockquote><p>参照：<a href=https://www.jianshu.com/p/9bd2327230c1 target=_blank rel=noopener>Hadoop、Hbase HA 高可用集群搭建</a></p></blockquote><ul><li>zookeeper 启停脚本: ./start.sh start</li></ul><pre><code>#!/bin/bash
+# 启动 ./start.sh start  
+# 停止 ./start.sh stop
+#参数传递
+usage=&quot;Usage: $0 (start|stop|status)&quot;
+if [ $# -lt 1 ]; then
+  echo $usage
+  exit 1
+fi
+behave=$1
+echo &quot;$behave zkServer cluster&quot;
+#主机名称
+for i in 1 2 3
+do
+#使用ssh进行启动
+ssh kafka$i &quot;/home/zookeeper/zookeeper-3.4.13/bin/zkServer.sh $behave&quot;
+done
+exit 0
+</code></pre><p>3、安装 kafka 集群</p><ul><li>下载 <a href=http://kafka.apache.org/downloads target=_blank rel=noopener>kafka下载地址</a> 下载，我这里选择2.11-0.11.0.0版本，通过ssh上传到服务器</li><li>解压 tar -zxvf kafka_2.11-0.11.0.0.tgz</li><li>设置环境变量 vim /etc/profile</li></ul><pre><code>export KAFKA_HOME=/home/kafka/kafka_2.11-0.11.0.0
+export PATH=$KAFKA_HOME/bin:$PATH
+#配置生效： source /etc/profile
+</code></pre><ul><li>修改配置文件
+进入到config目录 cd /home/kafka/kafka_2.11-0.11.0.0/config/</li></ul><pre><code>broker.id=0  #当前机器在集群中的唯一标识，和zookeeper的myid性质一样,每台服务器的broker.id都不能相同
+port=19092 #当前kafka对外提供服务的端口默认是9092
+host.name=192.168.7.100 #这个参数默认是关闭的，在0.8.1有个bug，DNS解析问题，失败率的问题。
+num.network.threads=3 #这个是borker进行网络处理的线程数
+num.io.threads=8 #这个是borker进行I/O处理的线程数
+log.dirs=/opt/kafka/kafkalogs/ #消息存放的目录，这个目录可以配置为“，”逗号分割的表达式，上面的num.io.threads要大于这个目录的个数这个目录，如果配置多个目录，新创建的topic他把消息持久化的地方是，当前以逗号分割的目录中，那个分区数最少就放那一个
+socket.send.buffer.bytes=102400 #发送缓冲区buffer大小，数据不是一下子就发送的，先回存储到缓冲区了到达一定的大小后在发送，能提高性能
+socket.receive.buffer.bytes=102400 #kafka接收缓冲区大小，当数据到达一定大小后在序列化到磁盘
+socket.request.max.bytes=104857600 #这个参数是向kafka请求消息或者向kafka发送消息的请请求的最大数，这个值不能超过java的堆栈大小
+num.partitions=1 #默认的分区数，一个topic默认1个分区数
+log.retention.hours=168 #默认消息的最大持久化时间，168小时，7天
+message.max.byte=5242880  #消息保存的最大值5M
+default.replication.factor=2  #kafka保存消息的副本数，如果一个副本失效了，另一个还可以继续提供服务
+replica.fetch.max.bytes=5242880  #取消息的最大直接数
+log.segment.bytes=1073741824 #这个参数是：因为kafka的消息是以追加的形式落地到文件，当超过这个值的时候，kafka会新起一个文件
+log.retention.check.interval.ms=300000 #每隔300000毫秒去检查上面配置的log失效时间（log.retention.hours=168 ），到目录查看是否有过期的消息如果有，删除
+log.cleaner.enable=false #是否启用log压缩，一般不用启用，启用的话可以提高性能
+zookeeper.connect=192.168.7.100:12181,192.168.7.101:12181,192.168.7.107:1218 #设置zookeeper的连接端口
+</code></pre><ul><li>复制到其他服务器</li></ul><pre><code>scp -r /home/kafka/kafka_2.11-0.11.0.0 kafka2: /home/kafka
+scp -r /home/kafka/kafka_2.11-0.11.0.0 kafka3: /home/kafka
+#修改broker.id、host.name
+</code></pre><p><strong>4、启动Kafka集群并测试</strong></p><ul><li>启动服务</li></ul><pre><code>#1.启动zookeeper集群（3台都需要启动）
+cd /home/zookeeper/zookeeper-3.4.13/bin
+./zkServer.sh start
+#从后台启动Kafka集群（3台都需要启动）
+ cd /home/kafka/kafka_2.11-0.11.0.0/bin #进入到kafka的bin目录 
+./kafka-server-start.sh  ../config/server.properties
+</code></pre><ul><li>检查服务是否启动</li></ul><pre><code>#执行命令jps
+20348 Jps 
+4233 QuorumPeerMain 
+18991 Kafka
+</code></pre><ul><li>创建Topic来验证是否创建成功</li></ul><pre><code>#创建Topic
+./kafka-topics.sh --create --zookeeper 192.168.7.100:12181 --replication-factor 2 --partitions 1 --topic shuaige
+#解释
+--replication-factor 2   #复制两份
+--partitions 1 #创建1个分区
+--topic #主题为shuaige
+
+'''在一台服务器上创建一个发布者'''
+#创建一个broker，发布者
+./kafka-console-producer.sh --broker-list 192.168.7.100:19092 --topic shuaige
+
+'''在一台服务器上创建一个订阅者'''
+./kafka-console-consumer.sh --zookeeper localhost:12181 --topic shuaige --from-beginning
+</code></pre><ul><li>kafka 启停脚本：
+注：kafka停止脚本要调用kafka官方的kafka-server-stop.sh脚本。 但是官方的kafka-server-stop.sh 脚本是优点问题，不会真正的停止kafka。所以要先修改kafka-server-stop.sh</li></ul><pre><code>PIDS=$(ps ax | grep -i 'kafka\.Kafka' | grep java | grep -v grep | awk '{print $1}')
+修改为：
+      PIDS=$(jps -lm | grep -i 'kafka\.Kafka' | awk '{print $1}')
+</code></pre><pre><code>#启动：
+#!/bin/bash
+
+brokers=&quot;kafka1 kafka2 kafka3&quot;
+kafka_home=&quot;/home/kafka/kafka_2.11-0.11.0.0&quot;
+
+for i in $brokers
+do
+    echo &quot;Starting kafka on ${i} ... &quot;
+    ssh ${i} &quot;source /etc/profile; nohup sh ${kafka_home}/bin/kafka-server-start.sh ${kafka_home}
+/config/server.properties &gt; /dev/null 2&gt;&amp;1 &amp;&quot;
+    if [[ $? -ne 0 ]]; then
+        echo &quot;Start kafka on ${i} is OK !&quot;
+    fi
+done
+echo kafka kafka are started !
+exit 0
+</code></pre><pre><code>#停止
+#!/bin/bash 
+
+brokers=&quot;kafka1 kafka2 kafka3&quot;
+kafka_home=&quot;/home/kafka/kafka_2.11-0.11.0.0&quot;
+
+for i in $brokers
+do
+    echo &quot;Stopping kafka on ${i} ...&quot;
+    ssh ${i} &quot;source /etc/profile;bash ${kafka_home}/bin/kafka-server-stop.sh&quot;
+    if [[ $? -ne 0 ]]; then
+        echo &quot;Stopping ${kafka_home} on ${i} is down&quot;
+    fi
+done
+
+echo all kafka  are stopped !
+exit 0
+</code></pre><p>更多请看官方文档：http://kafka.apache.org/documentation.html</p><p>测试（在发布者那里发布消息看看订阅者那里是否能正常收到~）</p><ul><li>yahoo kafka 管理平台 安装</li></ul><blockquote><p><a href=https://blog.csdn.net/yuan_xw/article/details/79188565 target=_blank rel=noopener>kafka-manager</a>
+下载编译好的，修改配置文件zookeeper参数，启动运行
+注：关闭重启时，要删除RUNNUING文件</p></blockquote><hr><p><strong>5、 其他命令</strong>
+大部分命令可以去官方文档查看</p><ul><li>查看topic</li></ul><pre><code>./kafka-topics.sh --list --zookeeper localhost:12181
+#就会显示我们创建的所有topic
+</code></pre><ul><li>查看topic状态</li></ul><pre><code>/kafka-topics.sh --describe --zookeeper localhost:12181 --topic shuaige
+#下面是显示信息
+Topic:ssports    PartitionCount:1    ReplicationFactor:2    Configs:
+    Topic: shuaige    Partition: 0    Leader: 1    Replicas: 0,1    Isr: 1
+#分区为为1  复制因子为2   他的  shuaige的分区为0 
+#Replicas: 0,1   复制的为0，1
+</code></pre><p>OK kafka集群搭建完毕</p><p><strong>6、其他说明标注</strong></p><ul><li>日志说明</li></ul><p>默认kafka的日志是保存在/opt/kafka/kafka_2.10-0.9.0.0/logs目录下的，这里说几个需要注意的日志</p><pre><code>server.log #kafka的运行日志
+state-change.log  #kafka他是用zookeeper来保存状态，所以他可能会进行切换，切换的日志就保存在这里
+
+controller.log #kafka选择一个节点作为“controller”,当发现有节点down掉的时候它负责在游泳分区的所有节点中选择新的leader,这使得Kafka可以批量的高效的管理所有分区节点的主从关系。如果controller down掉了，活着的节点中的一个会备切换为新的controller.
+</code></pre><ul><li>上面的大家你完成之后可以登录zk来查看zk的目录情况</li></ul><pre><code>#使用客户端进入zk
+./zkCli.sh -server 127.0.0.1:12181  #默认是不用加’-server‘参数的因为我们修改了他的端口
+
+#查看目录情况 执行“ls /”
+[zk: 127.0.0.1:12181(CONNECTED) 0] ls /
+
+#显示结果：[consumers, config, controller, isr_change_notification, admin, brokers, zookeeper, controller_epoch]
+'''
+上面的显示结果中：只有zookeeper是，zookeeper原生的，其他都是Kafka创建的
+'''
+
+#标注一个重要的
+[zk: 127.0.0.1:2181(CONNECTED) 1] get /brokers/ids/0
+{&quot;jmx_port&quot;:-1,&quot;timestamp&quot;:&quot;1456125963355&quot;,&quot;endpoints&quot;:[&quot;PLAINTEXT://192.168.7.100:19092&quot;],&quot;host&quot;:&quot;192.168.7.100&quot;,&quot;version&quot;:2,&quot;port&quot;:19092}
+cZxid = 0x1000001c1
+ctime = Mon Feb 22 15:26:03 CST 2016
+mZxid = 0x1000001c1
+mtime = Mon Feb 22 15:26:03 CST 2016
+pZxid = 0x1000001c1
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x152e40aead20016
+dataLength = 139
+numChildren = 0
+[zk: 127.0.0.1:12181(CONNECTED) 2] 
+
+#还有一个是查看partion
+[zk: 127.0.0.1:2181(CONNECTED) 7] get /brokers/topics/shuaige/partitions/0
+null
+cZxid = 0x100000029
+ctime = Mon Feb 22 10:05:11 CST 2016
+mZxid = 0x100000029
+mtime = Mon Feb 22 10:05:11 CST 2016
+pZxid = 0x10000002a
+cversion = 1
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 0
+numChildren = 1
+[zk: 127.0.0.1:12181(CONNECTED) 8] 
+</code></pre><hr></div></article><footer class=minimal-footer><div class=post-tag><a href=/tags/kafka/ rel=tag class=post-tag-link>#kafka</a></div><div class=post-category><a href=/tech/ class="post-category-link active">tech</a> | <a href=/life/ class=post-category-link>life</a></div></footer></div></main></div><script>if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('\/sw.js');});}</script><script src=/js/medium-zoom.min.js></script><script>mediumZoom(document.querySelectorAll('div.post-body img'),{background:'hsla(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l), 0.95)'})</script></body></html>

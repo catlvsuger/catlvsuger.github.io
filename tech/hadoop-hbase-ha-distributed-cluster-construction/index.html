@@ -1,0 +1,407 @@
+<!doctype html><html lang=zh-cn><head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#"><meta charset=utf-8><meta name=generator content="Hugo 0.78.2"><meta name=theme-color content="#fff"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no, date=no, address=no, email=no"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><title>Hadoop Hbase HA高可用集群搭建 | 慢慢悠</title><link rel=stylesheet href=/css/meme.min.css><script src=/js/meme.min.js></script><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel+Decorative:wght@700&display=swap" media=print onload="this.media='all'"><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel+Decorative:wght@700&display=swap"></noscript><meta name=author content="eden"><meta name=description content="基础环境准备 根据前面[hadoop集群搭建](https://mydiscat.cn……"><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=mask-icon href=/icons/safari-pinned-tab.svg color=#2a6df4><link rel=apple-touch-icon sizes=180x180 href=/icons/apple-touch-icon.png><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="慢慢悠"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=mobile-web-app-capable content="yes"><meta name=application-name content="慢慢悠"><meta name=msapplication-starturl content="../../"><meta name=msapplication-TileColor content="#fff"><meta name=msapplication-TileImage content="../../icons/mstile-150x150.png"><link rel=manifest href=/manifest.json><link rel=canonical href=https://example.com/tech/hadoop-hbase-ha-distributed-cluster-construction/><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","datePublished":"2018-11-01T08:00:00+08:00","dateModified":"2020-11-27T17:21:09+08:00","url":"https://example.com/tech/hadoop-hbase-ha-distributed-cluster-construction/","headline":"Hadoop Hbase HA高可用集群搭建","description":"基础环境准备 根据前面[hadoop集群搭建](https://mydiscat.cn……","inLanguage":"zh-CN","articleSection":"tech","wordCount":4477,"image":["https://upload-images.jianshu.io/upload_images/6273500-862219dd55729e0b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240","https://upload-images.jianshu.io/upload_images/6273500-fb526b6ff7c7bb7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"],"author":{"@type":"Person","description":"因无所住，而生其心","email":"distant_cat@126.com","image":"https://example.com/icons/apple-touch-icon.png","url":"https://io-oi.me/","name":"eden"},"license":"在保留本文作者及本文链接的前提下，非商业用途随意转载分享。","publisher":{"@type":"Organization","name":"慢慢悠","logo":{"@type":"ImageObject","url":"https://example.com/icons/apple-touch-icon.png"},"url":"https://example.com/"},"mainEntityOfPage":{"@type":"WebSite","@id":"https://example.com/"}}</script><meta name=twitter:card content="summary_large_image"><meta name=twitter:creator content="@reuixiy"><meta property="og:title" content="Hadoop Hbase HA高可用集群搭建"><meta property="og:description" content="基础环境准备 根据前面[hadoop集群搭建](https://mydiscat.cn……"><meta property="og:url" content="https://example.com/tech/hadoop-hbase-ha-distributed-cluster-construction/"><meta property="og:site_name" content="慢慢悠"><meta property="og:locale" content="zh"><meta property="og:image" content="https://upload-images.jianshu.io/upload_images/6273500-862219dd55729e0b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240"><meta property="og:type" content="article"><meta property="article:published_time" content="2018-11-01T08:00:00+08:00"><meta property="article:modified_time" content="2020-11-27T17:21:09+08:00"><meta property="article:section" content="tech"><link rel=preconnect href=https://www.google-analytics.com crossorigin><script async src="https://www.googletagmanager.com/gtag/js?id="></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','');</script><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lato:wght@700&text=reuixiy&display=swap" media=print onload="this.media='all'"><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lato:wght@700&text=reuixiy&display=swap"></noscript></head><body><div class=container><header class=header><div class=header-wrapper><div class="header-inner single"><div class=site-brand><a href=/ class=brand>慢慢悠</a></div><nav class=nav><ul class=menu id=menu><li class=menu-item><a href=/life/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon life"><path d="M301.1 212c4.4 4.4 4.4 11.9.0 16.3l-9.7 9.7c-4.4 4.7-11.9 4.7-16.6.0l-10.5-10.5c-4.4-4.7-4.4-11.9.0-16.6l9.7-9.7c4.4-4.4 11.9-4.4 16.6.0l10.5 10.8zm-30.2-19.7c3-3 3-7.8.0-10.5-2.8-3-7.5-3-10.5.0-2.8 2.8-2.8 7.5.0 10.5 3.1 2.8 7.8 2.8 10.5.0zm-26 5.3c-3 2.8-3 7.5.0 10.2 2.8 3 7.5 3 10.5.0 2.8-2.8 2.8-7.5.0-10.2-3-3-7.7-3-10.5.0zm72.5-13.3c-19.9-14.4-33.8-43.2-11.9-68.1 21.6-24.9 40.7-17.2 59.8.8 11.9 11.3 29.3 24.9 17.2 48.2-12.5 23.5-45.1 33.2-65.1 19.1zm47.7-44.5c-8.9-10-23.3 6.9-15.5 16.1 7.4 9 32.1 2.4 15.5-16.1zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-66.2 42.6c2.5-16.1-20.2-16.6-25.2-25.7-13.6-24.1-27.7-36.8-54.5-30.4 11.6-8 23.5-6.1 23.5-6.1.3-6.4.0-13-9.4-24.9 3.9-12.5.3-22.4.3-22.4 15.5-8.6 26.8-24.4 29.1-43.2 3.6-31-18.8-59.2-49.8-62.8-22.1-2.5-43.7 7.7-54.3 25.7-23.2 40.1 1.4 70.9 22.4 81.4-14.4-1.4-34.3-11.9-40.1-34.3-6.6-25.7 2.8-49.8 8.9-61.4.0.0-4.4-5.8-8-8.9.0.0-13.8.0-24.6 5.3 11.9-15.2 25.2-14.4 25.2-14.4.0-6.4-.6-14.9-3.6-21.6-5.4-11-23.8-12.9-31.7 2.8.1-.2.3-.4.4-.5-5 11.9-1.1 55.9 16.9 87.2-2.5 1.4-9.1 6.1-13 10-21.6 9.7-56.2 60.3-56.2 60.3-28.2 10.8-77.2 50.9-70.6 79.7.3 3 1.4 5.5 3 7.5-2.8 2.2-5.5 5-8.3 8.3-11.9 13.8-5.3 35.2 17.7 24.4 15.8-7.2 29.6-20.2 36.3-30.4.0.0-5.5-5-16.3-4.4 27.7-6.6 34.3-9.4 46.2-9.1 8 3.9 8-34.3 8-34.3.0-14.7-2.2-31-11.1-41.5 12.5 12.2 29.1 32.7 28 60.6-.8 18.3-15.2 23-15.2 23-9.1 16.6-43.2 65.9-30.4 106 0 0-9.7-14.9-10.2-22.1-17.4 19.4-46.5 52.3-24.6 64.5 26.6 14.7 108.8-88.6 126.2-142.3 34.6-20.8 55.4-47.3 63.9-65 22 43.5 95.3 94.5 101.1 59z"/></svg><span class=menu-item-name>生活</span></a></li><li class=menu-item><a href=/tech/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon tech"><path d="M512 256c0 141.2-114.7 256-256 256C114.8 512 0 397.3.0 256S114.7.0 256 0s256 114.7 256 256zm-32 0c0-123.2-100.3-224-224-224C132.5 32 32 132.5 32 256s100.5 224 224 224 224-100.5 224-224zM160.9 124.6l86.9 37.1-37.1 86.9-86.9-37.1 37.1-86.9zm110 169.1 46.6 94h-14.6l-50-1e2-48.9 1e2h-14l51.1-106.9-22.3-9.4 6-14 68.6 29.1-6 14.3-16.5-7.1zm-11.8-116.3 68.6 29.4-29.4 68.3L230 246l29.1-68.6zm80.3 42.9 54.6 23.1-23.4 54.3-54.3-23.1 23.1-54.3z"/></svg><span class=menu-item-name>技术</span></a></li><li class=menu-item><a href=/about/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="icon about"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6.0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7.0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4.0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9s28-2.7 40.9-6.9c2.3-.7 4.7-1.1 7.1-1.1 42.9.0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg><span class=menu-item-name>关于</span></a></li><li class=menu-item><a id=theme-switcher href=#><span class="icon theme-icon-light">🌞</span><span class="icon theme-icon-dark">🌙</span></a></li></ul></nav></div></div><input type=checkbox id=nav-toggle aria-hidden=true>
+<label for=nav-toggle class=nav-toggle></label><label for=nav-toggle class=nav-curtain></label></header><main class="main single" id=main><div class=main-inner><article class="content post h-entry" data-align=justify data-type=tech data-toc-num=true><h1 class="post-title p-name">Hadoop Hbase HA高可用集群搭建</h1><div class="post-body e-content"><p class=description></p><p><strong>基础环境准备</strong>
+根据前面[hadoop集群搭建](<a href=https://mydiscat.cn/category/2018/10/31/Hadoop target=_blank rel=noopener>https://mydiscat.cn/category/2018/10/31/Hadoop</a> distributed cluster construction.html)、[hbase集群搭建](<a href=https://mydiscat.cn/category/2018/10/31/Hbase target=_blank rel=noopener>https://mydiscat.cn/category/2018/10/31/Hbase</a> distributed cluster construction.html)添加外部zookeeper集群</p><blockquote><p style=text-indent:0><span class=drop-cap>下</span>载zookeeper： <a href=http://mirrors.hust.edu.cn/apache/zookeeper/zookeeper-3.4.13/zookeeper-3.4.13.tar.gz target=_blank rel=noopener>zookeeper-3.4.13</a></p></blockquote><p><strong>zookeeper安装</strong></p><p>1、下载及安装
+解压到/home/zookeeper/目录下：</p><pre><code>tar -zxvf zookeeper-3.4.13.tar.gz -C /home/zookeeper/
+</code></pre><p>2、拷贝 zoo_sample.cfg
+进入zookeeper的conf目录，拷贝zoo_sample.cfg并重命名为zoo.cfg ：</p><pre><code>cd zookeeper-3.4.13/conf/
+cp zoo_sample.cfg zoo.cfg
+</code></pre><p>3、修改 zoo.cfg</p><pre><code>vi zoo.cfg
+</code></pre><p>修改如下，若原文件没有dataDir则直接添加：</p><pre><code>dataDir=/home/zookeeper/zookeeper-3.4.13/data/zkData
+//在最后添加，指定zookeeper集群主机及端口，机器数必须为奇数
+server.1=hadoop-master:2888:3888
+server.2=hadoop-slave1:2888:3888
+server.3=hadoop-slave2:2888:3888
+</code></pre><p>4、创建并编辑myid
+//在zookeeper根目录下创建zoo.cfg中配置的目录</p><pre><code>mkdir data/zkData/ -p
+//创建并编辑文件
+vi myid
+//输入1，即表示当前机器为在zoo.cfg中指定的server.1
+1
+//保存退出
+:wq
+</code></pre><p>5、拷贝zookeeper到其他机器
+上述操作是在hadoop-master机器上进行的，要将zookeeper拷贝到其他zookeeper集群机器上：</p><pre><code>cd /home/zookeeper
+scp -r zookeeper-3.4.13/ hadoop-slave1:/home/zookeeper/
+scp -r zookeeper-3.4.13/ hadoop-slave2:/home/zookeeper/
+</code></pre><p>6、修改其他机器的myid文件
+myid文件是作为当前机器在zookeeper集群的标识，这些标识在zoo.cfg文件中已经配置好了，但是之前在hadoop-master这台机器上配置的myid为1，所以还需要修改其他机器的myid文件：</p><pre><code>//在hadoop-slave1机器上
+echo 2 &gt; /home/zookeeper/zookeeper-3.4.13/data/zkData/myid
+//在hadoop-slave2机器上
+echo 3 &gt; /home/zookeeper/zookeeper-3.4.13/data/zkData/myid
+</code></pre><p>7、配置环境变量 vim /etc/profile</p><pre><code>添加：
+export ZOOKEEPER_HOME=/home/zookeeper/zookeeper-3.4.13
+export PATH=$PATH:$ZOOKEEPER_HOME/bin
+其它服务器同样配置
+</code></pre><p>配置生效 source /etc/profile
+8、启动zookeeper集群</p><pre><code>cd zookeeper-3.4.11/bin/
+//分别在master188、master189、slave190上启动
+/home/zookeeper/zookeeper-3.4.13/bin/zkServer.sh start
+
+//查看状态
+/home/zookeeper/zookeeper-3.4.13/bin/zkServer.sh  status
+三台机器的zookeeper状态必须只有一个leader，其他都是follower。
+
+//查看进程，若有QuorumpeerMain，则启动成功
+jps
+//停止
+/home/zookeeper/zookeeper-3.4.13/bin/zkServer.sh stop
+</code></pre><p><strong>hadoop添加zookeeper</strong></p><p>1、配置core-site.xml</p><pre><code>添加：
+  &lt;!-- 指定ZooKeeper集群的地址和端口。注意，数量一定是奇数，且不少于三个节点--&gt;
+  &lt;property&gt;
+    &lt;name&gt;ha.zookeeper.quorum&lt;/name&gt;
+    &lt;value&gt;hadoop-master:2181,hadoop-slave1:2181,hadoop-slave2:2181&lt;/value&gt;
+  &lt;/property&gt;
+修改：
+    &lt;property&gt;
+         &lt;name&gt;fs.defaultFS&lt;/name&gt;
+         &lt;value&gt;hdfs://hadoop-master:9000&lt;/value&gt;
+    &lt;/property&gt; 
+为：
+    &lt;property&gt;
+         &lt;name&gt;fs.defaultFS&lt;/name&gt;
+         &lt;value&gt;hdfs://ns1&lt;/value&gt;
+    &lt;/property&gt; 
+</code></pre><p>2、配置hdfs-site.xml</p><pre><code>&lt;configuration&gt;
+  &lt;!-- 指定副本数，不能超过机器节点数  --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.replication&lt;/name&gt;
+    &lt;value&gt;3&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 为namenode集群定义一个services name --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.nameservices&lt;/name&gt;
+    &lt;value&gt;ns1&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- nameservice 包含哪些namenode，为各个namenode起名 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.ha.namenodes.ns1&lt;/name&gt;
+    &lt;value&gt;hadoop-master,hadoop-slave1&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 名为hadoop-master的namenode的rpc地址和端口号，rpc用来和datanode通讯 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.namenode.rpc-address.ns1.hadoop-master&lt;/name&gt;
+    &lt;value&gt;hadoop-master:9000&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 名为hadoop-slave1的namenode的rpc地址和端口号，rpc用来和datanode通讯 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.namenode.rpc-address.ns1.hadoop-slave1&lt;/name&gt;
+    &lt;value&gt;hadoop-slave1:9000&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!--名为hadoop-master的namenode的http地址和端口号，用来和web客户端通讯 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.namenode.http-address.ns1.hadoop-master&lt;/name&gt;
+    &lt;value&gt;hadoop-master:50070&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 名为hadoop-slave1的namenode的http地址和端口号，用来和web客户端通讯 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.namenode.http-address.ns1.hadoop-slave1&lt;/name&gt;
+    &lt;value&gt;hadoop-slave1:50070&lt;/value&gt;
+  &lt;/property&gt;
+  
+  &lt;!-- namenode间用于共享编辑日志的journal节点列表 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.namenode.shared.edits.dir&lt;/name&gt;
+    &lt;value&gt;qjournal://hadoop-master:8485;hadoop-slave1:8485;hadoop-slave2:8485/ns1&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 指定该集群出现故障时，是否自动切换到另一台namenode --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.ha.automatic-failover.enabled.ns1&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- journalnode 上用于存放edits日志的目录 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.journalnode.edits.dir&lt;/name&gt;
+    &lt;value&gt;/home/hadoop/hadoop/tmp/data/dfs/journalnode&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 客户端连接可用状态的NameNode所用的代理类 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.client.failover.proxy.provider.ns1&lt;/name&gt;
+    &lt;value&gt;org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 一旦需要NameNode切换，使用ssh方式进行操作 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.ha.fencing.methods&lt;/name&gt;
+    &lt;value&gt;sshfence&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 如果使用ssh进行故障切换，使用ssh通信时用的密钥存储的位置 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.ha.fencing.ssh.private-key-files&lt;/name&gt;
+    &lt;value&gt;/root/.ssh/id_rsa&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- connect-timeout超时时间 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;dfs.ha.fencing.ssh.connect-timeout&lt;/name&gt;
+    &lt;value&gt;30000&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;property&gt;
+       &lt;name&gt;dfs.name.dir&lt;/name&gt;
+       &lt;value&gt;/home/hadoop/hadoop/hdfs/name&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;property&gt;
+       &lt;name&gt;dfs.data.dir&lt;/name&gt;
+       &lt;value&gt;/home/hadoop/hadoop/hdfs/data&lt;/value&gt;
+  &lt;/property&gt;
+&lt;/configuration&gt;
+
+</code></pre><p>3、配置 mapred-site.xml</p><pre><code>取消：
+ &lt;!-- &lt;property&gt;
+        &lt;name&gt;mapred.job.tracker&lt;/name&gt;
+        &lt;value&gt;http://hadoop-master:9001&lt;/value&gt;
+  &lt;/property&gt;--&gt;
+</code></pre><p>4、配置 yarn-site.xml</p><pre><code>&lt;configuration&gt;
+
+  &lt;!-- 启用HA高可用性 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.ha.enabled&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 指定resourcemanager的名字 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.cluster-id&lt;/name&gt;
+    &lt;value&gt;yrc&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 使用了2个resourcemanager,分别指定Resourcemanager的地址 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.ha.rm-ids&lt;/name&gt;
+    &lt;value&gt;rm1,rm2&lt;/value&gt;
+  &lt;/property&gt;
+  
+  &lt;!-- 指定rm1的地址 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.hostname.rm1&lt;/name&gt;
+    &lt;value&gt;hadoop-master&lt;/value&gt;
+  &lt;/property&gt;
+  
+  &lt;!-- 指定rm2的地址  --&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.hostname.rm2&lt;/name&gt;
+    &lt;value&gt;hadoop-slave1&lt;/value&gt;
+  &lt;/property&gt;
+  
+  &lt;!-- 指定当前机器hadoop-master作为rm1 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.ha.id&lt;/name&gt;
+    &lt;value&gt;rm1&lt;/value&gt;
+  &lt;/property&gt;
+  
+  &lt;!-- 指定zookeeper集群机器 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.zk-address&lt;/name&gt;
+    &lt;value&gt;hadoop-master:2181,hadoop-slave1:2181,hadoop-slave2:2181&lt;/value&gt;
+  &lt;/property&gt;
+  
+  &lt;!-- NodeManager上运行的附属服务，默认是mapreduce_shuffle --&gt;
+  &lt;property&gt;
+    &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+    &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
+  &lt;/property&gt;
+
+&lt;/configuration&gt;
+</code></pre><p>5、vi slaves</p><pre><code>hadoop-master
+hadoop-slave1
+hadoop-slave2
+</code></pre><p><strong>拷贝hadoop到其他机器</strong></p><p>1、拷贝</p><pre><code>scp -r /home/hadoop/hadoop hadoop-slave1:/home/hadoop/
+scp -r /home/hadoop/hadoop hadoop-slave2:/home/hadoop/
+</code></pre><p>2、修改yarn-site.xml
+在hadoop-slave1机器，即ResourceManager备用主节点上修改如下属性，表示当前机器作为rm2:：</p><pre><code>  &lt;property&gt;
+    &lt;name&gt;yarn.resourcemanager.ha.id&lt;/name&gt;
+    &lt;value&gt;rm2&lt;/value&gt;
+  &lt;/property&gt;
+</code></pre><p>同时删除hadoop-slave2机器上的该属性对，因为hadoop-slave2机器并不作为ResourceManager。</p><p>####启动Hadoop
+1、启动zookeeper</p><pre><code>/home/zookeeper/zookeeper-3.4.13/bin/zkServer.sh start
+</code></pre><p>2、启动所有Journalnode</p><pre><code>/home/hadoop/hadoop/sbin/hadoop-daemon.sh start  journalnode
+</code></pre><p>3、格式化master namenode（这里直接复制会有问题，最好手动输入）（第一次启动操作）</p><pre><code>/home/hadoop/hadoop/bin/hdfs namenode –format
+
+#启动 master namenode 
+/home/hadoop/hadoop/sbin/hadoop-daemon.sh start namenode
+
+#master2上同步master namenode元数据 
+bin/hdfs namenode -bootstrapStandby
+#格式化 zk（在hadoop-master即可）（这里直接复杂会有问题，最好手动输入）
+
+/home/hadoop/hadoop/bin/hdfs zkfc –formatZK
+</code></pre><p>4、启动HDFS、YARN、ZookeeperFailoverController</p><pre><code>/home/hadoop/hadoop/sbin/start-dfs.sh
+//jps验证，显示NameNode和DataNode
+
+/home/hadoop/hadoop/sbin/start-yarn.sh
+//jps 验证，显示ResourceManager和NodeManager
+</code></pre><p>4、启动resourcemanager（hadoop-master、hadoop-slave1）</p><pre><code>/home/hadoop/hadoop/sbin/yarn-daemon.sh start resourcemanager
+</code></pre><p>5、启动zkfc来监控NN状态（在hadoop-master、hadoop-slave1）</p><pre><code>/home/hadoop/hadoop/sbin/hadoop-daemon.sh start zkfc
+</code></pre><p>启动命令：</p><pre><code>#hadoop-master
+/home/hadoop/hadoop/sbin/start-all.sh
+/home/hadoop/hadoop/sbin/hadoop-daemon.sh start zkfc
+
+#hadoop-slave1
+/home/hadoop/hadoop/sbin/yarn-daemon.sh start resourcemanager
+/home/hadoop/hadoop/sbin/hadoop-daemon.sh start zkfc
+</code></pre><p>停止命令：</p><pre><code>#hadoop-master
+/home/hadoop/hadoop/sbin/stop-all.sh
+/home/hadoop/hadoop/sbin/hadoop-daemon.sh stop zkfc
+
+#hadoop-slave1
+/home/hadoop/hadoop/sbin/yarn-daemon.sh stop resourcemanager
+/home/hadoop/hadoop/sbin/hadoop-daemon.sh stop zkfc
+</code></pre><p>启动所有进程显示：
+<img src=https://upload-images.jianshu.io/upload_images/6273500-862219dd55729e0b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 alt=启动项></p><p><strong>错误处理：</strong>
+1、NameNode is not formatted</p><pre><code>原因:  Path /home/hadoop/hadoop/hdfs/name should be specified as a URI in configura
+tion files.
+方法:把dfs.namenode.name.dir、dfs.datanode.data.dir的原路径格式如/usr/mywind/name改成file:/usr/mywind/name，即使用完全路径。
+还有个原因：格式化命令复制进去运行报错，手动输入正常
+</code></pre><p><strong>测试</strong>
+wordcount程序测试，在本地创建一个测试文件，并上传到hdfs上</p><pre><code>#https:// 为下面文字加颜色
+https://
+
+#创建一个测试文件
+ vim test.txt 
+#上传到hdfs上
+hadoop fs -put test.txt /input
+#查询hdfs上面是否存在input文件
+hadoop fs -ls /input
+#计算
+ hadoop jar hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.7.4.jar wordcount /input /output1
+#查看输出结果
+hadoop fs -cat /output1/part*
+
+</code></pre><p><img src=https://upload-images.jianshu.io/upload_images/6273500-fb526b6ff7c7bb7b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240 alt=结果></p><p><strong>Hbase安装配置</strong>
+进入/home/hbase/hbase/conf/目录，修改配置文件：
+1、配置 hbase-env.sh</p><pre><code>//配置JDK
+export JAVA_HOME=/usr/java/
+
+//保存pid文件
+export HBASE_PID_DIR=/home/hbase/hbase/data/hbase/pids
+
+//修改HBASE_MANAGES_ZK，禁用HBase自带的Zookeeper，因为我们是使用独立的Zookeeper
+export HBASE_MANAGES_ZK=false
+</code></pre><p>2、配置 hbase-site.xml</p><pre><code>&lt;configuration&gt;
+  &lt;!-- 设置HRegionServers共享目录，请加上端口号 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;hbase.rootdir&lt;/name&gt;
+    &lt;value&gt;hdfs://master188:9000/hbase&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 指定HMaster主机 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;hbase.master&lt;/name&gt;
+    &lt;value&gt;hdfs://master188:60000&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 启用分布式模式 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 指定Zookeeper集群位置 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;
+    &lt;value&gt;hadoop-master:2181,hadoop-slave1:2181,hadoop-slave2:2181&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 指定独立Zookeeper安装路径 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;hbase.zookeeper.property.dataDir&lt;/name&gt;
+    &lt;value&gt;/home/zookeeper/zookeeper-3.4.13&lt;/value&gt;
+  &lt;/property&gt;
+
+  &lt;!-- 指定ZooKeeper集群端口 --&gt;
+  &lt;property&gt;
+    &lt;name&gt;hbase.zookeeper.property.clientPort&lt;/name&gt;
+    &lt;value&gt;2181&lt;/value&gt;
+  &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><p>3）vi regionservers
+修改regionservers文件，因为当前是使用独立的Zookeeper集群，所以要指定RegionServers所在机器：</p><pre><code>hadoop-master
+hadoop-slave1
+hadoop-slave2
+</code></pre><p>4）创建pid文件保存目录
+在/home/hbase/hbase/目录下：</p><pre><code>mkdir data/hbase/pids -p
+</code></pre><p>3、拷贝HBase到其他机器</p><pre><code>scp -r /home/hbase/hbase/ hadoop-slave1:/home/hadoop/
+scp -r /home/hbase/hbase/ hadoop-slave2:/home/hadoop/
+</code></pre><p>4、启动HBase
+在主节点上启动HBase（主节点指NameNode状态为active的节点，非指文中的机器声明）：</p><pre><code>/home/hbase/hbase/bin/start-hbase.sh
+</code></pre><p>5、查看HMaster、Regionserver进程是否启动</p><pre><code>jps
+注意：此时Hadoop集群应处于启动状态，并且是在主节点执行start-hbase.sh启动HBase集群，否则HMaster进程将在启动几秒后消失，
+而备用的HMaster进程需要在备用主节点单独启动，命令是：./hbase-daemon.sh start master。
+
+在备用主节点启动HMaster进程，作为备用HMaster：
+/home/hbase/hbase/bin/hbase-daemon.sh start master
+</code></pre><p>5、HA高可用测试</p><pre><code>在浏览器中输入 ip:16010 ，查看主节点和备用主节点上的HMaster的状态，在备用主节点的web界面中，
+可以看到“Current Active Master: master188”，表示当前HBase主节点是master188机器；
+
+主节点---&gt;备用主节点
+这里的主节点指使用start-hbase.sh命令启动HBase集群的机器
+
+kill掉主节点的HMaster进程，在浏览器中查看备用主节点的HBase是否切换为active；
+
+若上述操作成功，则在主节点启动被杀死的HMaster进程：
+
+/home/hbase/hbase/bin/hbase-daemon.sh start master
+
+然后，kill掉备用主节点的HMaster进程，在浏览器中查看主节点的HBase是否切换为active，若操作成功，则HBase高可用集群搭建完成；
+</code></pre><p>6、HBase基本操作</p><pre><code>//启动HBase
+[root@vnet ~] start-hbase.sh
+
+//进入HBase Shell
+[root@vnet ~] hbase shell
+
+//查看当前HBase有哪些表
+hbase(main):&gt; list
+
+//创建表t_user，cf1和cf2是列族，列族一般不超过3个
+hbase(main):&gt; create 't_user','cf1','cf2'
+
+//获得表t_user的描述信息
+hbase(main):&gt; describe 't_user'
+
+//禁用表
+hbase(main):&gt; disable 't_user'
+
+//删除表，删除表之前要先把表禁用掉
+hbase(main):&gt; drop 't_user'
+
+//查询表是否存在
+hbase(main):&gt; exists 't_user'
+
+//查看全表数据
+hbase(main):&gt; scan 't_user'
+
+//插入数据，分别是表名、key、列（列族：具体列）、值。HBase是面向列的数据库，列可无限扩充
+hbase(main):&gt; put 't_user' ,'001','cf1:name','chenxj'
+hbase(main):&gt; put 't_user' ,'001','cf1:age','18'
+hbase(main):&gt; put 't_user' ,'001','cf2:sex','man'
+hbase(main):&gt; put 't_user' ,'002','cf1:name','chenxj'
+hbase(main):&gt; put 't_user' ,'002','cf1:address','fuzhou'
+hbase(main):&gt; put 't_user' ,'002','cf2:sex','man'
+
+//获取数据，可根据key、key和列族等进行查询
+hbase(main):&gt; get 't_user','001'
+hbase(main):&gt; get 't_user','002','cf1'
+hbase(main):&gt; get 't_user','001','cf1:age'
+</code></pre><p>7、集群启动结果
+Hadoop + Zookeeper + HBase 高可用集群启动后，进程状态如下：</p><div class=table-container><table><thead><tr><th>描述</th><th>hadoop-master</th><th>hadoop-slave1</th><th>hadoop-slave2</th></tr></thead><tbody><tr><td>HDFS主</td><td>NameNode</td><td>NameNode</td><td></td></tr><tr><td>HDFS从</td><td>DataNode</td><td>DataNode</td><td>DataNode</td></tr><tr><td>YARN主</td><td>ResourceManager</td><td>ResourceManager</td><td></td></tr><tr><td>YARN从</td><td>NodeManager</td><td>NodeManager</td><td>NodeManager</td></tr><tr><td>HBase主</td><td>HMaster</td><td>HMaster</td><td></td></tr><tr><td>HBase从</td><td>HRegionServer</td><td>HRegionServer</td><td>HRegionServer</td></tr><tr><td>Zookeeper独立进程</td><td>QuorumPeerMain</td><td>QuorumPeerMain</td><td>QuorumPeerMain</td></tr><tr><td>NameNodes数据同步</td><td>JournalNode</td><td>JournalNode</td><td>JournalNode</td></tr><tr><td>主备故障切换</td><td>DFSZKFailoverController</td><td>DFSZKFailoverController</td><td></td></tr></tbody></table></div><p><strong>总结</strong>
+需要注意的地方：</p><p>1）备用节点上的NameNode、ResourceManager、HMaster均需单独启动；</p><pre><code>hadoop-daemon.sh start namenode
+yarn-daemon.sh start resourcemanager
+hbase-daemon.sh start master 
+</code></pre><p>2）可以使用-forcemanual参数强制切换主节点与备用主节点，但强制切换后集群的自动故障转移将会失效，需要重新格式化zkfc：hdfs zdfc -formatZK;</p><pre><code>（这个没有测试）
+hdfs haadmin -transitionToActive/transitionToStandby  -forcemanual  hadoop-slave1
+yarn rmadmin -transitionToActive/transitionToStandby  -forcemanual  rm2
+</code></pre><p>3）在备用主节点同步主节点的元数据时，主节点的HDFS必须已经启动；</p><p>4）无法查看standby状态的节点上的hdfs；</p><p>5）格式化namenode时要先启动各个JournalNode机器上的journalnode进程：
+否则会报journalnode拒绝连接错误</p><pre><code>hadoop-daemon.sh start journalnode；
+</code></pre><p>6）若遇到问题，可以先考虑是哪个组件出现问题，然后查看该组件或与该组件相关的组件的日志信息；若各组件web页面无法访问，或存在其他连接问题，可以从「防火墙是否关闭」、「端口是否被占用」、「SSH」、「集群机器是否处于同一网段」内等角度考虑</p><p><strong>参考： <a href=https://www.cnblogs.com/sqchen/p/8080952.html target=_blank rel=noopener>Hadoop HA高可用集群搭建（Hadoop+Zookeeper+HBase）</a></strong></p><hr></div></article><footer class=minimal-footer><div class=post-tag><a href=/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/ rel=tag class=post-tag-link>#大数据</a></div><div class=post-category><a href=/tech/ class="post-category-link active">tech</a> | <a href=/life/ class=post-category-link>life</a></div></footer></div></main></div><script>if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('\/sw.js');});}</script><script src=/js/medium-zoom.min.js></script><script>mediumZoom(document.querySelectorAll('div.post-body img'),{background:'hsla(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l), 0.95)'})</script></body></html>

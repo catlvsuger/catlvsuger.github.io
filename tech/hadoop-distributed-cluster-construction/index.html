@@ -1,0 +1,122 @@
+<!doctype html><html lang=zh-cn><head prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article#"><meta charset=utf-8><meta name=generator content="Hugo 0.78.2"><meta name=theme-color content="#fff"><meta name=viewport content="width=device-width,initial-scale=1"><meta name=format-detection content="telephone=no, date=no, address=no, email=no"><meta http-equiv=cache-control content="no-transform"><meta http-equiv=cache-control content="no-siteapp"><title>Hadoop分布式集群搭建 | 慢慢悠</title><link rel=stylesheet href=/css/meme.min.css><script src=/js/meme.min.js></script><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel+Decorative:wght@700&display=swap" media=print onload="this.media='all'"><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&family=Source+Code+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel+Decorative:wght@700&display=swap"></noscript><meta name=author content="eden"><meta name=description content="基础环境准备 1、软件环境 centos 6.5 三台服务器分配的IP地址：8/9/10 jdk1.8 hadoop使用……"><link rel="shortcut icon" href=/favicon.ico type=image/x-icon><link rel=mask-icon href=/icons/safari-pinned-tab.svg color=#2a6df4><link rel=apple-touch-icon sizes=180x180 href=/icons/apple-touch-icon.png><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-title content="慢慢悠"><meta name=apple-mobile-web-app-status-bar-style content="black-translucent"><meta name=mobile-web-app-capable content="yes"><meta name=application-name content="慢慢悠"><meta name=msapplication-starturl content="../../"><meta name=msapplication-TileColor content="#fff"><meta name=msapplication-TileImage content="../../icons/mstile-150x150.png"><link rel=manifest href=/manifest.json><link rel=canonical href=https://example.com/tech/hadoop-distributed-cluster-construction/><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","datePublished":"2018-10-31T08:00:00+08:00","dateModified":"2020-11-27T17:21:09+08:00","url":"https://example.com/tech/hadoop-distributed-cluster-construction/","headline":"Hadoop分布式集群搭建","description":"基础环境准备 1、软件环境 centos 6.5 三台服务器分配的IP地址：8/9/10 jdk1.8 hadoop使用……","inLanguage":"zh-CN","articleSection":"tech","wordCount":2910,"image":"https://example.com/icons/apple-touch-icon.png","author":{"@type":"Person","description":"因无所住，而生其心","email":"distant_cat@126.com","image":"https://example.com/icons/apple-touch-icon.png","url":"https://io-oi.me/","name":"eden"},"license":"在保留本文作者及本文链接的前提下，非商业用途随意转载分享。","publisher":{"@type":"Organization","name":"慢慢悠","logo":{"@type":"ImageObject","url":"https://example.com/icons/apple-touch-icon.png"},"url":"https://example.com/"},"mainEntityOfPage":{"@type":"WebSite","@id":"https://example.com/"}}</script><meta name=twitter:card content="summary"><meta name=twitter:creator content="@reuixiy"><meta property="og:title" content="Hadoop分布式集群搭建"><meta property="og:description" content="基础环境准备 1、软件环境 centos 6.5 三台服务器分配的IP地址：8/9/10 jdk1.8 hadoop使用……"><meta property="og:url" content="https://example.com/tech/hadoop-distributed-cluster-construction/"><meta property="og:site_name" content="慢慢悠"><meta property="og:locale" content="zh"><meta property="og:image" content="https://example.com/icons/apple-touch-icon.png"><meta property="og:type" content="article"><meta property="article:published_time" content="2018-10-31T08:00:00+08:00"><meta property="article:modified_time" content="2020-11-27T17:21:09+08:00"><meta property="article:section" content="tech"><link rel=preconnect href=https://www.google-analytics.com crossorigin><script async src="https://www.googletagmanager.com/gtag/js?id="></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','');</script><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lato:wght@700&text=reuixiy&display=swap" media=print onload="this.media='all'"><noscript><link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Lato:wght@700&text=reuixiy&display=swap"></noscript></head><body><div class=container><header class=header><div class=header-wrapper><div class="header-inner single"><div class=site-brand><a href=/ class=brand>慢慢悠</a></div><nav class=nav><ul class=menu id=menu><li class=menu-item><a href=/life/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon life"><path d="M301.1 212c4.4 4.4 4.4 11.9.0 16.3l-9.7 9.7c-4.4 4.7-11.9 4.7-16.6.0l-10.5-10.5c-4.4-4.7-4.4-11.9.0-16.6l9.7-9.7c4.4-4.4 11.9-4.4 16.6.0l10.5 10.8zm-30.2-19.7c3-3 3-7.8.0-10.5-2.8-3-7.5-3-10.5.0-2.8 2.8-2.8 7.5.0 10.5 3.1 2.8 7.8 2.8 10.5.0zm-26 5.3c-3 2.8-3 7.5.0 10.2 2.8 3 7.5 3 10.5.0 2.8-2.8 2.8-7.5.0-10.2-3-3-7.7-3-10.5.0zm72.5-13.3c-19.9-14.4-33.8-43.2-11.9-68.1 21.6-24.9 40.7-17.2 59.8.8 11.9 11.3 29.3 24.9 17.2 48.2-12.5 23.5-45.1 33.2-65.1 19.1zm47.7-44.5c-8.9-10-23.3 6.9-15.5 16.1 7.4 9 32.1 2.4 15.5-16.1zM504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-66.2 42.6c2.5-16.1-20.2-16.6-25.2-25.7-13.6-24.1-27.7-36.8-54.5-30.4 11.6-8 23.5-6.1 23.5-6.1.3-6.4.0-13-9.4-24.9 3.9-12.5.3-22.4.3-22.4 15.5-8.6 26.8-24.4 29.1-43.2 3.6-31-18.8-59.2-49.8-62.8-22.1-2.5-43.7 7.7-54.3 25.7-23.2 40.1 1.4 70.9 22.4 81.4-14.4-1.4-34.3-11.9-40.1-34.3-6.6-25.7 2.8-49.8 8.9-61.4.0.0-4.4-5.8-8-8.9.0.0-13.8.0-24.6 5.3 11.9-15.2 25.2-14.4 25.2-14.4.0-6.4-.6-14.9-3.6-21.6-5.4-11-23.8-12.9-31.7 2.8.1-.2.3-.4.4-.5-5 11.9-1.1 55.9 16.9 87.2-2.5 1.4-9.1 6.1-13 10-21.6 9.7-56.2 60.3-56.2 60.3-28.2 10.8-77.2 50.9-70.6 79.7.3 3 1.4 5.5 3 7.5-2.8 2.2-5.5 5-8.3 8.3-11.9 13.8-5.3 35.2 17.7 24.4 15.8-7.2 29.6-20.2 36.3-30.4.0.0-5.5-5-16.3-4.4 27.7-6.6 34.3-9.4 46.2-9.1 8 3.9 8-34.3 8-34.3.0-14.7-2.2-31-11.1-41.5 12.5 12.2 29.1 32.7 28 60.6-.8 18.3-15.2 23-15.2 23-9.1 16.6-43.2 65.9-30.4 106 0 0-9.7-14.9-10.2-22.1-17.4 19.4-46.5 52.3-24.6 64.5 26.6 14.7 108.8-88.6 126.2-142.3 34.6-20.8 55.4-47.3 63.9-65 22 43.5 95.3 94.5 101.1 59z"/></svg><span class=menu-item-name>生活</span></a></li><li class=menu-item><a href=/tech/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="icon tech"><path d="M512 256c0 141.2-114.7 256-256 256C114.8 512 0 397.3.0 256S114.7.0 256 0s256 114.7 256 256zm-32 0c0-123.2-100.3-224-224-224C132.5 32 32 132.5 32 256s100.5 224 224 224 224-100.5 224-224zM160.9 124.6l86.9 37.1-37.1 86.9-86.9-37.1 37.1-86.9zm110 169.1 46.6 94h-14.6l-50-1e2-48.9 1e2h-14l51.1-106.9-22.3-9.4 6-14 68.6 29.1-6 14.3-16.5-7.1zm-11.8-116.3 68.6 29.4-29.4 68.3L230 246l29.1-68.6zm80.3 42.9 54.6 23.1-23.4 54.3-54.3-23.1 23.1-54.3z"/></svg><span class=menu-item-name>技术</span></a></li><li class=menu-item><a href=/about/><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" class="icon about"><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6.0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7.0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4.0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9s28-2.7 40.9-6.9c2.3-.7 4.7-1.1 7.1-1.1 42.9.0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg><span class=menu-item-name>关于</span></a></li><li class=menu-item><a id=theme-switcher href=#><span class="icon theme-icon-light">🌞</span><span class="icon theme-icon-dark">🌙</span></a></li></ul></nav></div></div><input type=checkbox id=nav-toggle aria-hidden=true>
+<label for=nav-toggle class=nav-toggle></label><label for=nav-toggle class=nav-curtain></label></header><main class="main single" id=main><div class=main-inner><article class="content post h-entry" data-align=justify data-type=tech data-toc-num=true><h1 class="post-title p-name">Hadoop分布式集群搭建</h1><div class="post-body e-content"><p class=description></p><p><strong>基础环境准备</strong></p><p style=text-indent:0><span class=drop-cap>1</span>、软件环境</p><blockquote><p>centos 6.5 三台服务器分配的IP地址：8/9/10
+jdk1.8
+hadoop使用2.7.4版本</p></blockquote><p>2、host配置和主机名（三台）</p><p>修改四台服务器的hosts文件
+vim /etc/hosts</p><blockquote><p>192.168.0.8 hadoop-master
+192.168.0.9 hadoop-slave1
+192.168.0.10 hadoop-slave2</p></blockquote><p>分别修改服务器的主机名:HOSTNAME，master为例说明
+vi /etc/sysconfig/network</p><blockquote><p>HOSTNAME=hadoop-master
+执行reboot后生效，完成之后依次修改其它salve服务器为： hadoop-slave1~2。</p></blockquote><p>3、服务器安装jdk（三台）
+建议使用yum安装jdk,也可以自行下载安装我是下载了1.8)</p><blockquote><p>yum -y install java-1.7.0-openjdk*
+下载的通过ssh复制到服务器</p></blockquote><p>配置环境变量，修改配置文件vim /etc/profile</p><blockquote><p>export JAVA_HOME=/usr/java/jdk1.8.0_152
+export PATH= $JAVA_HOME/bin:$PATH
+export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</p></blockquote><p>使用souce命令让立刻生效</p><blockquote><p>source /etc/profile</p></blockquote><p>###免密登陆
+1、首先关闭四台服务器的防火墙和SELINUX</p><ul><li>查看防火墙状态</li></ul><blockquote><p>service iptables status</p></blockquote><ul><li>关闭防火墙</li></ul><blockquote><p>service iptables stop
+chkconfig iptables off</p></blockquote><ul><li>关闭SELINUX后，需要重启服务器</li></ul><blockquote><p>-- 关闭SELINUX
+# vim /etc/selinux/config
+-- 注释掉
+#SELINUX=enforcing
+#SELINUXTYPE=targeted
+-- 添加
+SELINUX=disabled</p></blockquote><p>2、免密码登录本机
+下面以配置hadoop-master本机无密码登录为例进行讲解，用户需参照下面步骤完成h-salve1~2三台子节点机器的本机无密码登录
+1） 生产秘钥</p><blockquote><p>ssh-keygen -t rsa</p></blockquote><p>2）将公钥追加到”authorized_keys”文件</p><blockquote><p>cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys</p></blockquote><p>3）赋予权限</p><blockquote><p>chmod 600 .ssh/authorized_keys</p></blockquote><p>4）验证本机能无密码访问</p><blockquote><p>ssh hadoop-master
+最后，依次配置h-salve1~2无密码访问</p></blockquote><p>3、hadoop-master本机无密码登录hadoop-slave1、hadoop-slave2以hadoop-master无密码登录hadoop-slave1为例讲解：</p><p>1）登录hadoop-slave1 ，复制hadoop-master服务器的公钥”id_rsa.pub”到hadoop-slave1服务器的”root”目录下。</p><blockquote><p>scp root@hadoop-master:/root/.ssh/id_rsa.pub /root/</p></blockquote><p>2）将hadoop-master的公钥（id_rsa.pub）追加到hadoop-slave1的authorized_keys中</p><blockquote><p>cat id_rsa.pub >> .ssh/authorized_keys
+rm -rf id_rsa.pub</p></blockquote><p>3）在 hadoop-master上面测试</p><blockquote><p>ssh hadoop-slave1</p></blockquote><p>4、下面以hadoop-slave1无密码登录hadoop-master为例进行讲解，用户需参照下面步骤完成hadoop-slave2无密码登录hadoop-master。</p><p>1）登录hadoop-master，复制hadoop-slave1服务器的公钥”id_rsa.pub”到hadoop-master服务器的”/root/”目录下。</p><blockquote><p>scp root@hadoop-slave1:/root/.ssh/id_rsa.pub /root/</p></blockquote><p>2）将hadoop-slave1的公钥（id_rsa.pub）追加到hadoop-master的authorized_keys中。</p><blockquote><p>cat id_rsa.pub >> .ssh/authorized_keys
+rm -rf id_rsa.pub //删除id_rsa.pub</p></blockquote><p>3）在 hadoop-slave1上面测试</p><blockquote><p>ssh hadoop-master
+依次配置 hadoop-slave2</p></blockquote><p>到此主从的无密登录已经完成了</p><p>####Hadoop环境搭建
+<strong>配置hadoop-master的hadoop环境</strong>
+1、hadoop-master上 解压缩安装包及创建基本目录</p><blockquote><p>#下载 (我已经下好2.7.4版本)
+wget <a href=http://apache.claz.org/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz target=_blank rel=noopener>http://apache.claz.org/hadoop/common/hadoop-2.7.3/hadoop-2.7.3.tar.gz</a>
+#解压<br>tar -xzvf hadoop-2.7.3.tar.gz -C /usr/local
+#重命名<br>mv hadoop-2.7.3 hadoop</p></blockquote><p>2、 配置hadoop-master的hadoop环境变量</p><p>1）配置环境变量，修改配置文件vi /etc/profile</p><blockquote><p>export HADOOP_HOME=/home/hadoop/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin</p></blockquote><p>使得hadoop命令在当前终端立即生效</p><blockquote><p>source /etc/profile</p></blockquote><p>下面配置，文件都在：/home/hadoop/hadoop/etc/hadoop路径下</p><p>2、配置core-site.xml</p><p>修改Hadoop核心配置文件/home/hadoop/hadoop/etc/hadoop/core-site.xml，通过fs.default.name指定NameNode的IP地址和端口号，通过hadoop.tmp.dir指定hadoop数据存储的临时文件夹。</p><pre><code>&lt;configuration&gt;
+　　 &lt;property&gt;
+　　　　&lt;name&gt;hadoop.tmp.dir&lt;/name&gt;
+　　　　&lt;value&gt;file:/home/hadoop/hadoop/tmp&lt;/value&gt;
+　　　　&lt;description&gt;Abase for other temporary directories.&lt;/description&gt;
+     &lt;/property&gt;
+     &lt;property&gt;
+        &lt;name&gt;fs.defaultFS&lt;/name&gt;
+        &lt;value&gt;hdfs://hadoop-master:9000&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><blockquote><p>特别注意：如没有配置hadoop.tmp.dir参数，此时系统默认的临时目录为：/tmp/hadoo-hadoop。而这个目录在每次重启后都会被删除，必须重新执行format才行，否则会出错。</p></blockquote><p>3、配置hdfs-site.xml：</p><p>修改HDFS核心配置文件/usr/local/hadoop/etc/hadoop/hdfs-site.xml，通过dfs.replication指定HDFS的备份因子为3，通过dfs.name.dir指定namenode节点的文件存储目录，通过dfs.data.dir指定datanode节点的文件存储目录。</p><pre><code>&lt;configuration&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.replication&lt;/name&gt;
+        &lt;value&gt;2&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.name.dir&lt;/name&gt;
+        &lt;value&gt;/home/hadoop/hadoop/hdfs/name&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;dfs.data.dir&lt;/name&gt;
+        &lt;value&gt;/home/hadoop/hadoop/hdfs/data&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><p>4、配置mapred-site.xml</p><p>拷贝mapred-site.xml.template为mapred-site.xml，在进行修改</p><blockquote><p>cp /home/hadoop/hadoop/etc/hadoop/mapred-site.xml.template /home/hadoop/hadoop/etc/hadoop/mapred-site.xml<br>vim /home/hadoop/hadoop/etc/hadoop/mapred-site.xml</p></blockquote><pre><code>&lt;configuration&gt;
+  &lt;property&gt;
+      &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
+      &lt;value&gt;yarn&lt;/value&gt;
+  &lt;/property&gt;
+   &lt;property&gt;
+      &lt;name&gt;mapred.job.tracker&lt;/name&gt;
+      &lt;value&gt;http://hadoop-master:9001&lt;/value&gt;
+  &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><p>5、配置yarn-site.xml
+后面两个property为2.7.4 nodemanager不启动添加，解决内存太小问题</p><pre><code>&lt;configuration&gt;
+&lt;!-- Site specific YARN configuration properties --&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
+        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+        &lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;
+        &lt;value&gt;hadoop-master&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;!-- 启动nodemanager value 为cpu核数 查看每个物理CPU中core的个数(即核数) cat /proc/cpuinfo| grep &quot;cpu cores&quot;| uniq --&gt;
+    &lt;property&gt;
+            &lt;name&gt;yarn.nodemanager.resource.cpu-vcores&lt;/name&gt;
+            &lt;value&gt;2&lt;/value&gt;
+    &lt;/property&gt;
+    &lt;property&gt;
+            &lt;name&gt;yarn.nodemanager.resource.memory-mb&lt;/name&gt;
+            &lt;value&gt;8192&lt;/value&gt;
+    &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre><p>6、配置masters文件</p><p>修改/home/hadoop/hadoop/etc/hadoop/masters文件，该文件指定namenode节点所在的服务器机器。删除localhost，添加namenode节点的主机名hadoop-master；不建议使用IP地址，因为IP地址可能会变化，但是主机名一般不会变化。</p><blockquote><p>vi /home/hadoop/hadoop/etc/hadoop/masters
+## 内容
+hadoop-master</p></blockquote><p>7、修改hadoop-env.sh</p><blockquote><p>vi /usr/local/hadoop/etc/hadoop/hadoop-env.sh
+## 配置项
+export JAVA_HOME=/usr/java/jdk1.8.0_152</p></blockquote><p>8、配置slaves文件（Master主机特有）</p><p>修改/home/hadoop/hadoop/etc/hadoop/slaves文件，该文件指定哪些服务器节点是datanode节点。删除locahost，添加所有datanode节点的主机名，如下所示。</p><blockquote><p>vi /home/hadoop/hadoop/etc/hadoop/slaves
+## 内容
+hadoop-slave1
+hadoop-slave2
+hadoop-slave3</p></blockquote><p><strong>配置hadoop-slave的hadoop环境</strong></p><p>下面以配置hadoop-slave1的hadoop为例进行演示，用户需参照以下步骤完成其他hadoop-slave2~3服务器的配置。</p><p>1）复制hadoop到hadoop-slave1节点</p><blockquote><p>scp -r /home/hadoop/hadoop hadoop-slave1:/home/hadoop/</p></blockquote><p>登录hadoop-slave1服务器，删除slaves内容</p><blockquote><p>rm -rf /home/hadoop/hadoop/etc/hadoop/slaves</p></blockquote><p>2）配置环境变量</p><blockquote><p>vi /etc/profile
+## 内容
+export HADOOP_HOME= /home/hadoop/hadoop
+export PATH=$PATH:$HADOOP_HOME/bin</p></blockquote><p>使得hadoop命令在当前终端立即生效；</p><blockquote><p>source /etc/profile
+期间报了一个错误
+-bash: export: ` /home/hadoop/hadoop': not a valid identifier
+原因是/home前面多个空格</p></blockquote><p>依次配置其它slave服务</p><p>###启动集群
+1、格式化HDFS文件系统</p><p>进入master的~/hadoop目录，执行以下操作</p><blockquote><p>bin/hadoop namenode -format</p></blockquote><p>格式化namenode，第一次启动服务前执行的操作，以后不需要执行。</p><p>2、然后启动hadoop：</p><blockquote><p>sbin/start-all.sh</p></blockquote><p>3、使用jps命令查看运行情况</p><blockquote><p>#master 执行 jps查看运行情况
+25928 SecondaryNameNode
+25742 NameNode
+26387 Jps
+26078 ResourceManager</p></blockquote><blockquote><p>#slave 执行 jps查看运行情况
+24002 NodeManager
+23899 DataNode
+24179 Jps</p></blockquote><p>4、命令查看Hadoop集群的状态</p><p>通过简单的jps命令虽然可以查看HDFS文件管理系统、MapReduce服务是否启动成功，但是无法查看到Hadoop整个集群的运行状态。我们可以通过hadoop dfsadmin -report进行查看。用该命令可以快速定位出哪些节点挂掉了，HDFS的容量以及使用了多少，以及每个节点的硬盘使用情况。</p><blockquote><p>hadoop dfsadmin -report</p></blockquote><p>输出结果：</p><blockquote><p>Configured Capacity: 50108030976 (46.67 GB)
+Present Capacity: 41877471232 (39.00 GB)
+DFS Remaining: 41877385216 (39.00 GB)
+DFS Used: 86016 (84 KB)
+DFS Used%: 0.00%
+Under replicated blocks: 0
+Blocks with corrupt replicas: 0
+Missing blocks: 0
+Missing blocks (with replication factor 1): 0
+......</p></blockquote><p>5、hadoop 重启</p><blockquote><p>sbin/stop-all.sh
+sbin/start-all.sh</p></blockquote><ul><li><strong>参考</strong>：纯洁的微笑 :<a href=http://www.ityouknow.com/hadoop/2017/07/24/hadoop-cluster-setup.html target=_blank rel=noopener>hadoop分布式集群搭建</a></li></ul><hr></div></article><footer class=minimal-footer><div class=post-tag><a href=/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/ rel=tag class=post-tag-link>#大数据</a></div><div class=post-category><a href=/tech/ class="post-category-link active">tech</a> | <a href=/life/ class=post-category-link>life</a></div></footer></div></main></div><script>if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('\/sw.js');});}</script><script src=/js/medium-zoom.min.js></script><script>mediumZoom(document.querySelectorAll('div.post-body img'),{background:'hsla(var(--color-bg-h), var(--color-bg-s), var(--color-bg-l), 0.95)'})</script></body></html>
